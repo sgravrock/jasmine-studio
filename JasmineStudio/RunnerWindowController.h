@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RunnerWindowController : NSWindowController<NSTableViewDelegate, NSTableViewDataSource>
+@interface RunnerWindowController : NSWindowController<NSOutlineViewDelegate, NSOutlineViewDataSource>
 
 - (void)initProjectWithBaseDir:(NSURL *)baseDir;
 

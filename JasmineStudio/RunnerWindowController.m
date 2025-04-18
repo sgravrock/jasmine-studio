@@ -66,17 +66,32 @@
 }
 
 
-#pragma mark NSTableViewDataSource
+#pragma mark NSOutlineViewDataSource
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-    return 3;
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(nullable id)item {
+    if (item == nil) {
+        NSLog(@"numberOfChildrenOfItem(%p): 3", item);
+        return 3;
+    }
+    
+    NSLog(@"numberOfChildrenOfItem(%p): 0", item);
+    return 0;
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
     TempModel *m = [[TempModel alloc] init];
-    m.n = row;
-    NSLog(@"Returning %p for %ld", m, (long)row);
+    m.n = index;
+    NSLog(@"outlineView:child:ofItem: returning %p for %p[%ld]", m, item, (long)index);
     return m;
 }
 
+- (nullable id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
+    return item;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+    NSLog(@"isItemExpandable: %p => true", item);
+    return false;
+}
+    
 @end
