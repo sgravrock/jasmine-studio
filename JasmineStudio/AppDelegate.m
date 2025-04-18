@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "RunnerWindowController.h"
 
 @interface AppDelegate ()
 
@@ -15,18 +16,27 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+    NSOpenPanel *openPanel = [[NSOpenPanel alloc] init];
+    openPanel.canChooseFiles = NO;
+    openPanel.canChooseDirectories = YES;
+    openPanel.allowsMultipleSelection = NO;
+    openPanel.message = @"Select a Directory";
+    openPanel.prompt = @"Select";
+    
+    [openPanel beginWithCompletionHandler:^(NSModalResponse result) {
+        if (result == NSModalResponseOK) {
+            [self openProjectWithBaseDir:openPanel.URL windowOwner:self];
+        } else {
+            exit(0);
+        }
+    }];
 }
 
-
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
+- (void)openProjectWithBaseDir:(NSURL *)baseDir windowOwner:(id)windowOwner {
+    // TODO: Check whether there is a plausible Jasmine config
+    RunnerWindowController *wc = [[RunnerWindowController alloc] initWithWindowNibName:@"RunnerWindow"];
+    [wc initProjectWithBaseDir:baseDir];
+    [wc showWindow:nil];
 }
-
-
-- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
-    return YES;
-}
-
 
 @end

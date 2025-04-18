@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA1749632DB2B49C005421C9 /* ARCHITECTURE.md in Resources */ = {isa = PBXBuildFile; fileRef = AA1749622DB2B496005421C9 /* ARCHITECTURE.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		AA17492A2DB2B078005421C9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		AA1749172DB2B076005421C9 /* JasmineStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasmineStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1749292DB2B078005421C9 /* JasmineStudioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1749332DB2B078005421C9 /* JasmineStudioUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA1749622DB2B496005421C9 /* ARCHITECTURE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ARCHITECTURE.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		AA17490E2DB2B076005421C9 = {
 			isa = PBXGroup;
 			children = (
+				AA1749622DB2B496005421C9 /* ARCHITECTURE.md */,
 				AA1749192DB2B076005421C9 /* JasmineStudio */,
 				AA17492C2DB2B078005421C9 /* JasmineStudioTests */,
 				AA1749362DB2B078005421C9 /* JasmineStudioUITests */,
@@ -211,6 +217,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA1749632DB2B49C005421C9 /* ARCHITECTURE.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
