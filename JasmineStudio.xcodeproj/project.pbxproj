@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AA17492A2DB2B078005421C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA17490F2DB2B076005421C9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA1749162DB2B076005421C9;
+			remoteInfo = JasmineStudio;
+		};
+		AA1749342DB2B078005421C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA17490F2DB2B076005421C9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA1749162DB2B076005421C9;
+			remoteInfo = JasmineStudio;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AA1749172DB2B076005421C9 /* JasmineStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasmineStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA1749292DB2B078005421C9 /* JasmineStudioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA1749332DB2B078005421C9 /* JasmineStudioUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AA1749192DB2B076005421C9 /* JasmineStudio */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = JasmineStudio;
+			sourceTree = "<group>";
+		};
+		AA17492C2DB2B078005421C9 /* JasmineStudioTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = JasmineStudioTests;
+			sourceTree = "<group>";
+		};
+		AA1749362DB2B078005421C9 /* JasmineStudioUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = JasmineStudioUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA1749142DB2B076005421C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1749262DB2B078005421C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1749302DB2B078005421C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA17490E2DB2B076005421C9 = {
+			isa = PBXGroup;
+			children = (
+				AA1749192DB2B076005421C9 /* JasmineStudio */,
+				AA17492C2DB2B078005421C9 /* JasmineStudioTests */,
+				AA1749362DB2B078005421C9 /* JasmineStudioUITests */,
+				AA1749182DB2B076005421C9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA1749182DB2B076005421C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA1749172DB2B076005421C9 /* JasmineStudio.app */,
+				AA1749292DB2B078005421C9 /* JasmineStudioTests.xctest */,
+				AA1749332DB2B078005421C9 /* JasmineStudioUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AA1749162DB2B076005421C9 /* JasmineStudio */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA17493D2DB2B078005421C9 /* Build configuration list for PBXNativeTarget "JasmineStudio" */;
+			buildPhases = (
+				AA1749132DB2B076005421C9 /* Sources */,
+				AA1749142DB2B076005421C9 /* Frameworks */,
+				AA1749152DB2B076005421C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AA1749192DB2B076005421C9 /* JasmineStudio */,
+			);
+			name = JasmineStudio;
+			packageProductDependencies = (
+			);
+			productName = JasmineStudio;
+			productReference = AA1749172DB2B076005421C9 /* JasmineStudio.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AA1749282DB2B078005421C9 /* JasmineStudioTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA1749402DB2B078005421C9 /* Build configuration list for PBXNativeTarget "JasmineStudioTests" */;
+			buildPhases = (
+				AA1749252DB2B078005421C9 /* Sources */,
+				AA1749262DB2B078005421C9 /* Frameworks */,
+				AA1749272DB2B078005421C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA17492B2DB2B078005421C9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA17492C2DB2B078005421C9 /* JasmineStudioTests */,
+			);
+			name = JasmineStudioTests;
+			packageProductDependencies = (
+			);
+			productName = JasmineStudioTests;
+			productReference = AA1749292DB2B078005421C9 /* JasmineStudioTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AA1749322DB2B078005421C9 /* JasmineStudioUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA1749432DB2B078005421C9 /* Build configuration list for PBXNativeTarget "JasmineStudioUITests" */;
+			buildPhases = (
+				AA17492F2DB2B078005421C9 /* Sources */,
+				AA1749302DB2B078005421C9 /* Frameworks */,
+				AA1749312DB2B078005421C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA1749352DB2B078005421C9 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA1749362DB2B078005421C9 /* JasmineStudioUITests */,
+			);
+			name = JasmineStudioUITests;
+			packageProductDependencies = (
+			);
+			productName = JasmineStudioUITests;
+			productReference = AA1749332DB2B078005421C9 /* JasmineStudioUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA17490F2DB2B076005421C9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					AA1749162DB2B076005421C9 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					AA1749282DB2B078005421C9 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = AA1749162DB2B076005421C9;
+					};
+					AA1749322DB2B078005421C9 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = AA1749162DB2B076005421C9;
+					};
+				};
+			};
+			buildConfigurationList = AA1749122DB2B076005421C9 /* Build configuration list for PBXProject "JasmineStudio" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AA17490E2DB2B076005421C9;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AA1749182DB2B076005421C9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA1749162DB2B076005421C9 /* JasmineStudio */,
+				AA1749282DB2B078005421C9 /* JasmineStudioTests */,
+				AA1749322DB2B078005421C9 /* JasmineStudioUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA1749152DB2B076005421C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1749272DB2B078005421C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1749312DB2B078005421C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA1749132DB2B076005421C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1749252DB2B078005421C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA17492F2DB2B078005421C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA17492B2DB2B078005421C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA1749162DB2B076005421C9 /* JasmineStudio */;
+			targetProxy = AA17492A2DB2B078005421C9 /* PBXContainerItemProxy */;
+		};
+		AA1749352DB2B078005421C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA1749162DB2B076005421C9 /* JasmineStudio */;
+			targetProxy = AA1749342DB2B078005421C9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AA17493B2DB2B078005421C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		AA17493C2DB2B078005421C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AA17493E2DB2B078005421C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = JasmineStudio/JasmineStudio.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		AA17493F2DB2B078005421C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = JasmineStudio/JasmineStudio.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudio;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		AA1749412DB2B078005421C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudioTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JasmineStudio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JasmineStudio";
+			};
+			name = Debug;
+		};
+		AA1749422DB2B078005421C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudioTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JasmineStudio.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JasmineStudio";
+			};
+			name = Release;
+		};
+		AA1749442DB2B078005421C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudioUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = JasmineStudio;
+			};
+			name = Debug;
+		};
+		AA1749452DB2B078005421C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudioUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_TARGET_NAME = JasmineStudio;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA1749122DB2B076005421C9 /* Build configuration list for PBXProject "JasmineStudio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA17493B2DB2B078005421C9 /* Debug */,
+				AA17493C2DB2B078005421C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA17493D2DB2B078005421C9 /* Build configuration list for PBXNativeTarget "JasmineStudio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA17493E2DB2B078005421C9 /* Debug */,
+				AA17493F2DB2B078005421C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA1749402DB2B078005421C9 /* Build configuration list for PBXNativeTarget "JasmineStudioTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA1749412DB2B078005421C9 /* Debug */,
+				AA1749422DB2B078005421C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA1749432DB2B078005421C9 /* Build configuration list for PBXNativeTarget "JasmineStudioUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA1749442DB2B078005421C9 /* Debug */,
+				AA1749452DB2B078005421C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AA17490F2DB2B076005421C9 /* Project object */;
+}
