@@ -30,6 +30,7 @@
 @property (weak) IBOutlet NSOutlineView *outlineView;
 @property (weak) IBOutlet NSButton *button;
 @property (nonatomic, strong) NSMutableArray<TempModel *> *models;
+@property (nonatomic, strong) TempModel *childModel;
 @end
 
 @implementation SuiteTreeViewController
@@ -89,6 +90,9 @@
         m.n = i;
         [self.models addObject:m];
     }
+    
+    self.childModel = [[TempModel alloc] init];
+    self.childModel. n = 10;
 }
 
 #pragma mark NSOutlineViewDataSource
@@ -108,6 +112,8 @@
     
     if (item == nil) {
         result = self.models.count;
+    } else if (item == self.models[0]) {
+        return 1;
     } else {
         result = 0;
     }
@@ -121,12 +127,18 @@
     
     if (item == nil) {
         result = self.models[index];
+    } else if (item == self.models[0] && index == 0) {
+        result = self.childModel;
     } else {
         result = nil;
     }
     
     NSLog(@"outlineView:child:ofItem: returning %p for %p[%ld]", result, item, (long)index);
     return result;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+    return item == self.models[0];
 }
 //
 //- (nullable id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
