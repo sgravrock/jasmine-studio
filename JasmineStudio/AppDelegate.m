@@ -6,7 +6,7 @@
 //
 
 #import "AppDelegate.h"
-#import "RunnerWindowController.h"
+#import "SuiteTreeViewController.h"
 
 @interface AppDelegate ()
 
@@ -34,9 +34,13 @@
 
 - (void)openProjectWithBaseDir:(NSURL *)baseDir windowOwner:(id)windowOwner {
     // TODO: Check whether there is a plausible Jasmine config
-    RunnerWindowController *wc = [[RunnerWindowController alloc] initWithWindowNibName:@"RunnerWindow"];
-    [wc initProjectWithBaseDir:baseDir];
-    [wc showWindow:nil];
+//    RunnerWindowController *wc = [[RunnerWindowController alloc] initWithWindowNibName:@"RunnerWindow"];
+//    [wc initProjectWithBaseDir:baseDir];
+//    [wc showWindow:nil];
+    NSWindow *window = [[NSWindow alloc] init];
+    window.contentViewController = [[SuiteTreeViewController alloc] initWithNibName:@"SuiteTreeViewController" bundle:nil];
+    [window makeKeyAndOrderFront:self];
+    self.window = window;
 }
 
 @end
