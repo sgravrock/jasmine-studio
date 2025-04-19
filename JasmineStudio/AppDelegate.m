@@ -18,7 +18,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [ProjectOpener promptAndOpenThen:^(NSWindow * _Nonnull window) {
         [window makeKeyAndOrderFront:self];
-    } onFailure:^{
+    } onCancel:^{
         exit(0);
     }];
 }

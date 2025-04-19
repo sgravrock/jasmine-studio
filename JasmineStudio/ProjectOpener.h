@@ -11,8 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ProjectOpener: NSObject
 
-+ (void)promptAndOpenThen:(void (^)(NSWindow *window))onSuccess onFailure:(void (^)(void))onFailure;
-+ (NSWindow *)openProjectWithBaseDir:(NSURL *)baseDir;
++ (void)promptAndOpenThen:(void (^)(NSWindow *))onSuccess onCancel:(void (^)(void))onCancel;
++ (NSWindow *)openProjectWithBaseDir:(NSString *)baseDir error:(NSError **)error;
 
 @end
 
