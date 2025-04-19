@@ -141,9 +141,9 @@
     return item == self.models[0];
 }
 //
-//- (nullable id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
-//    return item;
-//}
+- (nullable id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
+    return item;
+}
 //
 //- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
 //    NSLog(@"isItemExpandable: %p => true", item);
