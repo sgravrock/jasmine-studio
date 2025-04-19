@@ -28,7 +28,6 @@
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet NSOutlineView *outlineView;
-@property (weak) IBOutlet NSButton *button;
 @property (nonatomic, strong) NSMutableArray<TempModel *> *models;
 @property (nonatomic, strong) TempModel *childModel;
 @end
@@ -43,43 +42,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self shenanigans];
-    [self.button setTarget:self];
-    [self.button setAction:@selector(makeRocketGo:)];
-//    [self performSelectorOnMainThread:@selector(shenanigans) withObject:nil waitUntilDone:YES];
     
     dispatch_queue_t queue = dispatch_queue_create("shenanigans", DISPATCH_QUEUE_SERIAL);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), queue, ^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self shenanigans];
+            [self initModels];
+            [self.outlineView reloadData];
         });
     });
-  
-    // THis works!
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self shenanigans];
-//    });
-
-    // This works!
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-//        [self performSelectorOnMainThread:@selector(shenanigans) withObject:nil waitUntilDone:YES];
-//    });
-        
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-////        [self initModels];
-//        [self performSelectorOnMainThread:@selector(shenanigans) withObject:nil waitUntilDone:YES];
-////        [self.outlineView reloadData];
-//    });
-}
-
-- (void)shenanigans {
-    NSLog(@"shenanigans");
-//    [self.outlineView beginUpdates];
-    [self initModels];
-    [self.outlineView reloadData];
-//    self.outlineView.needsDisplay = YES;
-//        [self.outlineView setNeedsDisplay];
-//    [self.outlineView endUpdates];
 }
 
 - (void)initModels {
@@ -99,14 +69,9 @@
 
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(nullable id)item {
     if (!self.models) {
-//        [self initModels];
         NSLog(@"numberOfChildrenOfItem bailing");
         return 0;
     }
-//    if (!self.inited) {
-//        NSLog(@"numberOfChildrenOfItem bailing");
-//        return 0;
-//    }
 
     NSInteger result;
     
@@ -140,15 +105,11 @@
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
     return item == self.models[0];
 }
-//
+
+// Needed for data binding
 - (nullable id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
     return item;
 }
-//
-//- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-//    NSLog(@"isItemExpandable: %p => true", item);
-//    return false;
-//}
 
 
 @end
