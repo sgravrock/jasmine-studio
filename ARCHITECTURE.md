@@ -72,3 +72,39 @@ little underlying business logic.
 I don't have a strong personal preference for one language over the other, so
 it seems worth going with Objective-C even if only to preserve the possibility
 of porting later on.
+
+## Project configuration
+
+To run Jasmine, several pieces of information are needed:
+
+* The path to the Node executable
+* The path to the project root directory (the one that paths in the Jasmine
+  config file will be evaluated relative to)
+* The path to the Jasmine config file
+* The path to the Jasmine executable
+
+The path to the Node executable is needed because it's typically installed in a
+nonstandard path, often via a version manager like nvm that allows the user to
+switch between versions of Node. In a coommand line application that could be
+handled by `execvp`, running `which node`, or other mechanisms that rely on the
+`PATH` environment variable. But that won't work because GUI applications don't
+inherit the user's shell environment. So it's necessary to ask the user.
+
+The three Jasmine-related properties can be reduced to one: the path to the 
+project root directory. That won't work in valid but unusual setups such as
+multi-project monorepos and config files in nonstandard locations, but it's
+probably fine to ignore those for the foreseeable future.
+
+That leaves two pieces of information needed: the project root dir and the path
+to Node. Jasmine Studio should interactively prompt for both of those at
+startup. A command line launcher that takes a project root dir (or assumes the
+current working dir), finds Node via `PATH`, and invokes Jasmine Studio might
+also be a nice addition.
+
+That suggests a startup sequence like this:
+
+1. AppDelegate opens a project setup window.
+2. Project setup window gives the user a chance to enter the project base dir
+   and Node path.
+3. When the user clicks OK, the paths are validated. If correct, the setup
+   window is closed and the main window is opened.
