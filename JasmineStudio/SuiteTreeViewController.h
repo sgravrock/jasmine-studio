@@ -9,8 +9,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate>
+@class Jasmine;
 
+@interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate>
+@property (nonatomic, strong) Jasmine *jasmine;
 @end
 
 NS_ASSUME_NONNULL_END

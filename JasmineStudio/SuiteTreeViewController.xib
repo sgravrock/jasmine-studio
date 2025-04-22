@@ -55,7 +55,7 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="kjL-7M-EIn" name="value" keyPath="objectValue.stringValue" id="wIR-TU-5sF"/>
+                                                            <binding destination="kjL-7M-EIn" name="value" keyPath="objectValue.name" id="cE3-aj-vNe"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>

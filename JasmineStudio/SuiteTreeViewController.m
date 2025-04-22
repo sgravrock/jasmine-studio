@@ -6,104 +6,65 @@
 //
 
 #import "SuiteTreeViewController.h"
-
-// Model for table view cells
-@interface TempModel: NSObject<NSCopying>
-@property (nonatomic, assign) NSInteger n;
-- (NSString *)stringValue;
-@end
-
-@implementation TempModel
-- (NSString *)stringValue {
-    return [NSString stringWithFormat:@"%ld", (long)self.n];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    TempModel *copy = [[[self class] alloc] init];
-    copy.n = self.n;
-    return copy;
-}
-@end
-
+#import "Jasmine.h"
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet NSOutlineView *outlineView;
-@property (nonatomic, strong) NSMutableArray<TempModel *> *models;
-@property (nonatomic, strong) TempModel *childModel;
+@property (nonatomic, strong) SuiteNodeList *models;
 @end
 
 @implementation SuiteTreeViewController
 
-- (IBAction)makeRocketGo:(id)sender {
-    NSLog(@"Make rocket go");
-    [self.outlineView reloadData];
-    self.outlineView.needsDisplay = YES;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    dispatch_queue_t queue = dispatch_queue_create("shenanigans", DISPATCH_QUEUE_SERIAL);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), queue, ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self initModels];
-            [self.outlineView reloadData];
-        });
-    });
+    [self discoverNodes]; // TODO: Jasmine calls these "runables".
 }
 
-- (void)initModels {
-    self.models = [NSMutableArray arrayWithCapacity:3];
-    
-    for (int i = 0; i < 3; i++) {
-        TempModel *m = [[TempModel alloc] init];
-        m.n = i;
-        [self.models addObject:m];
-    }
-    
-    self.childModel = [[TempModel alloc] init];
-    self.childModel. n = 10;
+- (void)discoverNodes {
+    // TODO: show some kind of loading indicator
+    [self.jasmine enumerateWithCallback:^(SuiteNodeList * _Nullable result, NSError * _Nullable error) {
+        if (error != nil) {
+            // TODO
+            NSLog(@"oh no");
+        } else {
+            self.models = result;
+            [self.outlineView reloadData];
+        }
+    }];
 }
 
 #pragma mark NSOutlineViewDataSource
 
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(nullable id)item {
     if (!self.models) {
-        NSLog(@"numberOfChildrenOfItem bailing");
         return 0;
     }
 
-    NSInteger result;
-    
     if (item == nil) {
-        result = self.models.count;
-    } else if (item == self.models[0]) {
-        return 1;
+        return self.models.count;
+    } else if ([item isKindOfClass:[Suite class]]) {
+        return ((Suite *)item).children.count;
     } else {
-        result = 0;
+        return 0;
     }
-
-    NSLog(@"numberOfChildrenOfItem(%p): %ld", item, (long)result);
-    return result;
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
-    id result;
-    
     if (item == nil) {
-        result = self.models[index];
-    } else if (item == self.models[0] && index == 0) {
-        result = self.childModel;
+        return self.models[index];
+    } else if ([item isKindOfClass:[Suite class]]) {
+        return ((Suite *)item).children[index];
     } else {
-        result = nil;
+        return nil;
     }
-    
-    NSLog(@"outlineView:child:ofItem: returning %p for %p[%ld]", result, item, (long)index);
-    return result;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-    return item == self.models[0];
+    if ([item isKindOfClass:[Suite class]]) {
+        return ((Suite *)item).children.count > 0;
+    } else {
+        return NO;
+    }
 }
 
 // Needed for data binding
