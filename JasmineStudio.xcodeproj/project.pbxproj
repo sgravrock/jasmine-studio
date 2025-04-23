@@ -32,6 +32,7 @@
 		AA1749292DB2B078005421C9 /* JasmineStudioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1749332DB2B078005421C9 /* JasmineStudioUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA1749622DB2B496005421C9 /* ARCHITECTURE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ARCHITECTURE.md; sourceTree = "<group>"; };
+		AAF278AB2DB7E4F200E15C69 /* JasmineStudio.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = JasmineStudio.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -80,6 +81,7 @@
 		AA17490E2DB2B076005421C9 = {
 			isa = PBXGroup;
 			children = (
+				AAF278AB2DB7E4F200E15C69 /* JasmineStudio.xctestplan */,
 				AA1749622DB2B496005421C9 /* ARCHITECTURE.md */,
 				AA1749192DB2B076005421C9 /* JasmineStudio */,
 				AA17492C2DB2B078005421C9 /* JasmineStudioTests */,

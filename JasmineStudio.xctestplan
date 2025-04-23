@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "5664B37E-8904-4D13-9E95-B4D9FB9DB90A",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:JasmineStudio.xcodeproj",
+      "identifier" : "AA1749162DB2B076005421C9",
+      "name" : "JasmineStudio"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:JasmineStudio.xcodeproj",
+        "identifier" : "AA1749282DB2B078005421C9",
+        "name" : "JasmineStudioTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:JasmineStudio.xcodeproj",
+        "identifier" : "AA1749322DB2B078005421C9",
+        "name" : "JasmineStudioUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
