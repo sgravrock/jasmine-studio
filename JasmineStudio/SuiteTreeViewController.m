@@ -15,12 +15,7 @@
 
 @implementation SuiteTreeViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self discoverNodes]; // TODO: Jasmine calls these "runables".
-}
-
-- (void)discoverNodes {
+- (void)loadTree {
     // TODO: show some kind of loading indicator
     [self.jasmine enumerateWithCallback:^(SuiteNodeList * _Nullable result, NSError * _Nullable error) {
         if (error != nil) {

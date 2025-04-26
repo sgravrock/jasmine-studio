@@ -24,6 +24,10 @@ static SuiteNodeList *mapJsonObjects(NSArray *jsonObjects, NSError **error);
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    return [[[Suite class] alloc] initWithName:self.name children:self.children];
+}
+
 @end
 
 
@@ -38,6 +42,10 @@ static SuiteNodeList *mapJsonObjects(NSArray *jsonObjects, NSError **error);
     }
     
     return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    return [[[Spec class] alloc] initWithName:self.name];
 }
 
 @end

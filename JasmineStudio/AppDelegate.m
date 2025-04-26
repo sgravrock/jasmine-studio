@@ -13,25 +13,25 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    ProjectSetupViewController *setupController = [[ProjectSetupViewController alloc] initWithNibName:@"ProjectSetupViewController" bundle:nil];
-    NSWindow *setupWindow = [[NSWindow alloc] init];
-    setupWindow.contentViewController = setupController;
     
-    setupController.onCancel = ^{
+    NSStoryboard *sb = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
+    NSWindowController *setupWindowController = [sb instantiateControllerWithIdentifier:@"projectSetup"];
+    ProjectSetupViewController *setupViewController = (ProjectSetupViewController *)setupWindowController.window.contentViewController;
+    
+    setupViewController.onCancel = ^{
         exit(0);
     };
     
-    setupController.onOk = ^(NSString * _Nonnull projectBaseDir, NSString * _Nonnull nodePath) {
-        [setupWindow close];
-        NSWindow *runnerWindow = [[NSWindow alloc] init];
-        SuiteTreeViewController *controller = [[SuiteTreeViewController alloc] initWithNibName:@"SuiteTreeViewController" bundle:nil];
-        controller.jasmine = [[Jasmine alloc] initWithBaseDir:projectBaseDir nodePath:nodePath];
-        runnerWindow.contentViewController = controller;
-        [runnerWindow makeKeyAndOrderFront:self];
-
+    setupViewController.onOk = ^(NSString * _Nonnull projectBaseDir, NSString * _Nonnull nodePath) {
+        [setupWindowController.window close];
+        NSWindowController *runnerWindowController = [sb instantiateControllerWithIdentifier:@"suiteTreeViewWindowController"];
+        SuiteTreeViewController *runnerViewController = (SuiteTreeViewController *)runnerWindowController.window.contentViewController;
+        runnerViewController.jasmine = [[Jasmine alloc] initWithBaseDir:projectBaseDir nodePath:nodePath];
+        [runnerViewController loadTree];
+        [runnerWindowController.window makeKeyAndOrderFront:self];
     };
     
-    [setupWindow makeKeyAndOrderFront:self];
+    [setupWindowController.window makeKeyAndOrderFront:self];
 }
 
 @end
