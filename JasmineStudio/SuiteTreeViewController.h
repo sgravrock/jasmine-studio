@@ -6,14 +6,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Models.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class Jasmine;
-
 @interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate>
-@property (nonatomic, strong) Jasmine *jasmine;
-- (void)loadTree;
+- (void)show:(SuiteNodeList *)roots;
 @end
 
 NS_ASSUME_NONNULL_END

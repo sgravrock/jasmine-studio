@@ -7,7 +7,7 @@
 
 #import "AppDelegate.h"
 #import "ProjectSetupViewController.h"
-#import "SuiteTreeViewController.h"
+#import "RunnerViewController.h"
 #import "Jasmine.h"
 
 @implementation AppDelegate
@@ -24,10 +24,10 @@
     
     setupViewController.onOk = ^(NSString * _Nonnull projectBaseDir, NSString * _Nonnull nodePath) {
         [setupWindowController.window close];
-        NSWindowController *runnerWindowController = [sb instantiateControllerWithIdentifier:@"suiteTreeViewWindowController"];
-        SuiteTreeViewController *runnerViewController = (SuiteTreeViewController *)runnerWindowController.window.contentViewController;
+        NSWindowController *runnerWindowController = [sb instantiateControllerWithIdentifier:@"runnerWindowController"];
+        RunnerViewController *runnerViewController = (RunnerViewController *)runnerWindowController.window.contentViewController;
         runnerViewController.jasmine = [[Jasmine alloc] initWithBaseDir:projectBaseDir nodePath:nodePath];
-        [runnerViewController loadTree];
+        [runnerViewController loadSuite];
         [runnerWindowController.window makeKeyAndOrderFront:self];
     };
     

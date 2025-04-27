@@ -10,33 +10,25 @@
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet NSOutlineView *outlineView;
-@property (nonatomic, strong) SuiteNodeList *models;
+@property (nonatomic, strong) SuiteNodeList *roots;
 @end
 
 @implementation SuiteTreeViewController
 
-- (void)loadTree {
-    // TODO: show some kind of loading indicator
-    [self.jasmine enumerateWithCallback:^(SuiteNodeList * _Nullable result, NSError * _Nullable error) {
-        if (error != nil) {
-            // TODO
-            NSLog(@"oh no");
-        } else {
-            self.models = result;
-            [self.outlineView reloadData];
-        }
-    }];
+- (void)show:(SuiteNodeList *)roots {
+    self.roots = roots;
+    [self.outlineView reloadData];
 }
 
 #pragma mark NSOutlineViewDataSource
 
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(nullable id)item {
-    if (!self.models) {
+    if (!self.roots) {
         return 0;
     }
 
     if (item == nil) {
-        return self.models.count;
+        return self.roots.count;
     } else if ([item isKindOfClass:[Suite class]]) {
         return ((Suite *)item).children.count;
     } else {
@@ -46,7 +38,7 @@
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
     if (item == nil) {
-        return self.models[index];
+        return self.roots[index];
     } else if ([item isKindOfClass:[Suite class]]) {
         return ((Suite *)item).children[index];
     } else {

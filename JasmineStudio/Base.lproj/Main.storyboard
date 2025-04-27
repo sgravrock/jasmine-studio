@@ -701,10 +701,10 @@
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
         </scene>
-        <!--Suite tree view window-->
+        <!--Runner Window-->
         <scene sceneID="KS4-Ra-9W6">
             <objects>
-                <windowController storyboardIdentifier="suiteTreeViewWindowController" id="GwE-gh-kEv" userLabel="Suite tree view window" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="runnerWindowController" id="GwE-gh-kEv" userLabel="Runner Window" sceneMemberID="viewController">
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Mw9-9t-Ar3">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -719,7 +719,7 @@
                         </connections>
                     </window>
                     <connections>
-                        <segue destination="BGM-Cy-7Iq" kind="relationship" relationship="window.shadowedContentViewController" id="h34-nu-XU6"/>
+                        <segue destination="Gd0-v1-QAp" kind="relationship" relationship="window.shadowedContentViewController" destinationCreationSelector="somethingElse:sender:segueIdentifier:" id="h34-nu-XU6"/>
                     </connections>
                 </windowController>
                 <customObject id="fW7-cn-UsI" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -795,7 +795,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Q9z-uQ-xhK">
-                                    <rect key="frame" x="1" y="119" width="223" height="15"/>
+                                    <rect key="frame" x="1" y="254" width="478" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="rPQ-uk-Xy8">
@@ -824,7 +824,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
                             <clipView key="contentView" id="pRP-sn-qhv">
                                 <rect key="frame" x="1" y="1" width="478" height="270"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="13" outlineTableColumn="i0s-xP-gQL" id="zqk-Yx-OFD">
                                         <rect key="frame" x="0.0" y="0.0" width="478" height="270"/>
@@ -846,11 +846,11 @@
                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 <prototypeCellViews>
                                                     <tableCellView id="nyw-S8-Umn">
-                                                        <rect key="frame" x="8" y="0.0" width="431" height="24"/>
+                                                        <rect key="frame" x="18" y="0.0" width="461" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hia-Sh-GHd">
-                                                                <rect key="frame" x="0.0" y="4" width="431" height="16"/>
+                                                                <rect key="frame" x="0.0" y="4" width="461" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="yyc-eQ-lPY">
                                                                     <font key="font" usesAppearanceFont="YES"/>
@@ -890,7 +890,45 @@
                     </constraints>
                 </customView>
             </objects>
-            <point key="canvasLocation" x="618" y="770"/>
+            <point key="canvasLocation" x="1733" y="622"/>
+        </scene>
+        <!--Runner View Controller-->
+        <scene sceneID="iT1-Mk-m8e">
+            <objects>
+                <splitViewController id="Gd0-v1-QAp" customClass="RunnerViewController" sceneMemberID="viewController">
+                    <splitViewItems>
+                        <splitViewItem id="S91-57-iNu"/>
+                        <splitViewItem collapsed="YES" id="RVu-cN-fJc"/>
+                    </splitViewItems>
+                    <splitView key="splitView" dividerStyle="thin" id="SBD-zS-BcK">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <outlet property="delegate" destination="Gd0-v1-QAp" id="2iM-71-wlU"/>
+                        </connections>
+                    </splitView>
+                    <connections>
+                        <outlet property="splitView" destination="SBD-zS-BcK" id="7Lh-gP-kXb"/>
+                        <segue destination="BGM-Cy-7Iq" kind="relationship" relationship="splitItems" id="SHR-5g-hBZ"/>
+                        <segue destination="Kkt-2Z-o35" kind="relationship" relationship="splitItems" id="npk-Rj-6Ma"/>
+                    </connections>
+                </splitViewController>
+                <customObject id="e9u-PO-MXq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1155" y="657"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="zjG-LB-SEQ">
+            <objects>
+                <viewController id="Kkt-2Z-o35" sceneMemberID="viewController">
+                    <view key="view" id="miI-51-QGB">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="180"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="PQt-bx-7xg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1733" y="1026"/>
         </scene>
         <!--Project Setup View Controller-->
         <scene sceneID="hIz-AP-VOD">
