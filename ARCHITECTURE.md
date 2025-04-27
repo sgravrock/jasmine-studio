@@ -108,3 +108,52 @@ That suggests a startup sequence like this:
    and Node path.
 3. When the user clicks OK, the paths are validated. If correct, the setup
    window is closed and the main window is opened.
+
+
+## Runner UI structure
+
+The runner UI will consist of a window with a toolbar, a tree view
+(NSOutlineView), and a detail view for showing the output of individual specs.
+The user will be able to run the entire suite or subsets of it by clicking
+toolbar buttons or via a context menu on individual specs/suites. The basic
+structure of Cocoa imposes a relatively large minimum set of UI
+related objects:
+
+* A window and associated controller (which could just be NSWindowController)
+* A split view controller (master/detail)
+* An outline view and controller
+* An outline view data source (which might be one of the above objects)
+* An outline view delegate (which might be one of the above objects)
+* A detail view and controller
+
+There are a couple of unusual things. Context menus don't follow the delegate/
+data source pattern. Instead, they're implemented by subclassing the view they
+originate from (in this case NSOutlineView). [Apple's example](https://developer.apple.com/documentation/appkit/navigating-hierarchical-data-using-outline-and-split-views?language=objc)
+uses a custom delegate protocol to route the context menu construction to a 
+controller. That makes sense and is reasonably tidy, although keeping the menu
+construction in the view and invoking a delegate method when an item is clicked
+would also be reasonable. Apple's sample also departs from a "by the book"
+architecture in one other way: Toolbars are owned by windows and would normally
+be managed by an NSWindowController subclass, Apple's example does it in the
+window's root view controller instead. This cuts down on plumbing and 
+indirection and does away with the need for a custom window controller.
+
+Apple's example uses a mix of NSNotification and delegates to communicate among
+the various controllers. The use of NSNotification removes some indirection, but
+it would probably make it harder to have multiple windows running different
+suites than if everything used delegates.
+
+A reasonable design might look like:
+
+* Stock NSWindowController
+* Root view controller that handles:
+  * initialization
+  * showing the toolbar and responding to toolbar events
+  * telling the detail view controller what to show in response to outline
+    view events
+  * initiating test runs in response to outline view and toolbar events
+* Custom NSOutlineView subclass that implements context menus via a delegate
+* Tree view controller that acts as delegate, data source, and context menu
+  delegate for the outline view
+* Detail view controller that shows results/output for the selected spec
+

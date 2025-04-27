@@ -6,11 +6,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "OutlineViewWithContextMenu.h"
 #import "Models.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate>
+@interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate, OutlineViewContextMenuDelegate>
 - (void)show:(SuiteNodeList *)roots;
 @end
 

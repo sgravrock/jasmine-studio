@@ -9,7 +9,7 @@
 #import "Jasmine.h"
 
 @interface SuiteTreeViewController ()
-@property (weak) IBOutlet NSOutlineView *outlineView;
+@property (weak) IBOutlet OutlineViewWithContextMenu *outlineView;
 @property (nonatomic, strong) SuiteNodeList *roots;
 @end
 
@@ -59,5 +59,21 @@
     return item;
 }
 
+
+#pragma mark - OutlineViewContextMenuDelegate
+
+- (NSMenu * _Nullable)menuForOutlineView:(nonnull OutlineViewWithContextMenu *)sender row:(NSInteger)row {
+    NSMenu *contextMenu = [[NSMenu alloc] initWithTitle:@""];
+    NSMenuItem *runItem = [[NSMenuItem alloc] initWithTitle:@"Run" action:@selector(handleRunMenuItem:) keyEquivalent:@""];
+    runItem.representedObject = [self.outlineView itemAtRow:row];
+    [contextMenu addItem:runItem];
+
+    return contextMenu;
+}
+
+- (void)handleRunMenuItem:(id)sender {
+    id<SuiteNode> target = ((NSMenuItem *)sender).representedObject;
+    NSLog(@"Would run %@", target.name);
+}
 
 @end
