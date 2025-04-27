@@ -7,8 +7,11 @@
 
 #import "ProjectSetupViewController.h"
 #import "config.h"
+#import "userDefaults.h"
 
 @interface ProjectSetupViewController ()
+
+@property (nonatomic, strong) NSUserDefaults *userDefaults;
 
 @property (nonatomic, strong) NSString *projectBaseDir;
 - (NSString *)nodePath;
@@ -17,24 +20,21 @@
 @property (nonatomic, assign) BOOL hasValidProjectBaseDir;
 @property (nonatomic, assign) BOOL hasValidNodePath;
 
-@property (nonatomic, weak) IBOutlet NSTextField *projectBaseDirLabel;
-@property (nonatomic, weak) IBOutlet NSImageCell *projectBaseDirStateIndicator;
-@property (weak) IBOutlet NSTextField *nodePathField;
-@property (weak) IBOutlet NSImageView *nodePathStatusIndicator;
-@property (weak) IBOutlet NSButton *okButton;
-- (IBAction)selectProjectBaseDir:(id)sender;
-- (IBAction)ok:(id)sender;
-- (IBAction)cancel:(id)sender;
-
 @end
 
 @implementation ProjectSetupViewController
+
+- (void)configureWithUserDefaults:(NSUserDefaults *)userDefaults {
+    self.userDefaults = userDefaults;
+    [self restoreUserDefaults];
+}
 
 - (IBAction)cancel:(id)sender {
     self.onCancel();
 }
 
 - (IBAction)ok:(id)sender {
+    [self saveUserDefaults];
     self.onOk(self.projectBaseDir, self.nodePath);
 }
 
@@ -105,6 +105,27 @@
 
     self.nodePathStatusIndicator.image = img;
     self.okButton.enabled = self.hasValidProjectBaseDir && self.hasValidNodePath;
+}
+
+- (void)saveUserDefaults {
+    [self.userDefaults setObject:self.projectBaseDir forKey:kProjectBaseDirKey];
+    [self.userDefaults setObject:self.nodePath forKey:kNodePathKey];
+}
+
+- (void)restoreUserDefaults {
+    id projectBaseDir = [self.userDefaults objectForKey:kProjectBaseDirKey];
+    id nodePath = [self.userDefaults objectForKey:kNodePathKey];
+    
+    if ([projectBaseDir isKindOfClass:[NSString class]]) {
+        self.projectBaseDir = projectBaseDir;
+        self.projectBaseDirLabel.stringValue = projectBaseDir;
+        [self validateProjectBaseDir];
+    }
+    
+    if ([nodePath isKindOfClass:[NSString class]]) {
+        self.nodePathField.stringValue = nodePath;
+        [self validateNodePath];
+    }
 }
 
 @end

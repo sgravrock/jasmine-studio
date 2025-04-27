@@ -17,6 +17,7 @@
     NSStoryboard *sb = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
     NSWindowController *setupWindowController = [sb instantiateControllerWithIdentifier:@"projectSetup"];
     ProjectSetupViewController *setupViewController = (ProjectSetupViewController *)setupWindowController.window.contentViewController;
+    [setupViewController configureWithUserDefaults:[NSUserDefaults standardUserDefaults]];
     
     setupViewController.onCancel = ^{
         exit(0);
