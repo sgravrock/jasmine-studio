@@ -14,19 +14,11 @@
 			remoteGlobalIDString = AA3E5A612DBD615E00CD51E6;
 			remoteInfo = JasmineStudio;
 		};
-		AA3E5A822DBD615F00CD51E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AA3E5A5A2DBD615E00CD51E6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = AA3E5A612DBD615E00CD51E6;
-			remoteInfo = JasmineStudio;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		AA3E5A622DBD615E00CD51E6 /* JasmineStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasmineStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA3E5A772DBD615F00CD51E6 /* JasmineStudioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA3E5A812DBD615F00CD51E6 /* JasmineStudioUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,11 +30,6 @@
 		AA3E5A7A2DBD615F00CD51E6 /* JasmineStudioTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = JasmineStudioTests;
-			sourceTree = "<group>";
-		};
-		AA3E5A842DBD615F00CD51E6 /* JasmineStudioUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = JasmineStudioUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,13 +49,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA3E5A7E2DBD615F00CD51E6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,7 +57,6 @@
 			children = (
 				AA3E5A642DBD615E00CD51E6 /* JasmineStudio */,
 				AA3E5A7A2DBD615F00CD51E6 /* JasmineStudioTests */,
-				AA3E5A842DBD615F00CD51E6 /* JasmineStudioUITests */,
 				AA3E5A632DBD615E00CD51E6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,7 +66,6 @@
 			children = (
 				AA3E5A622DBD615E00CD51E6 /* JasmineStudio.app */,
 				AA3E5A772DBD615F00CD51E6 /* JasmineStudioTests.xctest */,
-				AA3E5A812DBD615F00CD51E6 /* JasmineStudioUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,29 +118,6 @@
 			productReference = AA3E5A772DBD615F00CD51E6 /* JasmineStudioTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		AA3E5A802DBD615F00CD51E6 /* JasmineStudioUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = AA3E5A912DBD615F00CD51E6 /* Build configuration list for PBXNativeTarget "JasmineStudioUITests" */;
-			buildPhases = (
-				AA3E5A7D2DBD615F00CD51E6 /* Sources */,
-				AA3E5A7E2DBD615F00CD51E6 /* Frameworks */,
-				AA3E5A7F2DBD615F00CD51E6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				AA3E5A832DBD615F00CD51E6 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				AA3E5A842DBD615F00CD51E6 /* JasmineStudioUITests */,
-			);
-			name = JasmineStudioUITests;
-			packageProductDependencies = (
-			);
-			productName = JasmineStudioUITests;
-			productReference = AA3E5A812DBD615F00CD51E6 /* JasmineStudioUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -176,10 +131,6 @@
 						CreatedOnToolsVersion = 16.2;
 					};
 					AA3E5A762DBD615F00CD51E6 = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = AA3E5A612DBD615E00CD51E6;
-					};
-					AA3E5A802DBD615F00CD51E6 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = AA3E5A612DBD615E00CD51E6;
 					};
@@ -201,7 +152,6 @@
 			targets = (
 				AA3E5A612DBD615E00CD51E6 /* JasmineStudio */,
 				AA3E5A762DBD615F00CD51E6 /* JasmineStudioTests */,
-				AA3E5A802DBD615F00CD51E6 /* JasmineStudioUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -215,13 +165,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA3E5A752DBD615F00CD51E6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		AA3E5A7F2DBD615F00CD51E6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -245,13 +188,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AA3E5A7D2DBD615F00CD51E6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -259,11 +195,6 @@
 			isa = PBXTargetDependency;
 			target = AA3E5A612DBD615E00CD51E6 /* JasmineStudio */;
 			targetProxy = AA3E5A782DBD615F00CD51E6 /* PBXContainerItemProxy */;
-		};
-		AA3E5A832DBD615F00CD51E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = AA3E5A612DBD615E00CD51E6 /* JasmineStudio */;
-			targetProxy = AA3E5A822DBD615F00CD51E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -467,34 +398,6 @@
 			};
 			name = Release;
 		};
-		AA3E5A922DBD615F00CD51E6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudioUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				TEST_TARGET_NAME = JasmineStudio;
-			};
-			name = Debug;
-		};
-		AA3E5A932DBD615F00CD51E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = sgravrock.JasmineStudioUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				TEST_TARGET_NAME = JasmineStudio;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -521,15 +424,6 @@
 			buildConfigurations = (
 				AA3E5A8F2DBD615F00CD51E6 /* Debug */,
 				AA3E5A902DBD615F00CD51E6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		AA3E5A912DBD615F00CD51E6 /* Build configuration list for PBXNativeTarget "JasmineStudioUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				AA3E5A922DBD615F00CD51E6 /* Debug */,
-				AA3E5A932DBD615F00CD51E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

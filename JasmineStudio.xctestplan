@@ -20,16 +20,8 @@
       "parallelizable" : false,
       "target" : {
         "containerPath" : "container:JasmineStudio.xcodeproj",
-        "identifier" : "AA1749282DB2B078005421C9",
+        "identifier" : "AA3E5A762DBD615F00CD51E6",
         "name" : "JasmineStudioTests"
-      }
-    },
-    {
-      "parallelizable" : true,
-      "target" : {
-        "containerPath" : "container:JasmineStudio.xcodeproj",
-        "identifier" : "AA1749322DB2B078005421C9",
-        "name" : "JasmineStudioUITests"
       }
     }
   ],
