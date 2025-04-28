@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^EnumerationCallback)(SuiteNodeList * _Nullable result, NSError  * _Nullable error);
+typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSError  * _Nullable error);
 
 
 @interface Jasmine : NSObject

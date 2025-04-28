@@ -21,7 +21,7 @@
 
 - (void)loadSuite {
     // TODO: show some kind of loading indicator
-    [self.jasmine enumerateWithCallback:^(SuiteNodeList * _Nullable result, NSError * _Nullable error) {
+    [self.jasmine enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
         if (error != nil) {
             // TODO
             NSLog(@"oh no");

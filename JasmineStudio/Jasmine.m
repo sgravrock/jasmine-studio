@@ -34,7 +34,7 @@
             // esp. when using too old a jasmine version.
             NSLog(@"oh no: %@", [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding]);
         } else {
-            SuiteNodeList *roots = suiteNodesFromJson(output, &error);
+            NSArray<SuiteNode *> *roots = suiteNodesFromJson(output, &error);
             callback(roots, error);
         }
     }];

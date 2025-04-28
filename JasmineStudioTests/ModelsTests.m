@@ -36,21 +36,28 @@
     NSData *jsonData = [json dataUsingEncoding:NSUTF8StringEncoding];
 
     NSError *error = nil;
-    NSArray<id<SuiteNode>> *result = suiteNodesFromJson(jsonData, &error);
+    NSArray<SuiteNode *> *result = suiteNodesFromJson(jsonData, &error);
     
     XCTAssertNil(error);
-    XCTAssertEqual(1, [result count]);
-    XCTAssertTrue([[result objectAtIndex:0] isKindOfClass:[Suite class]]);
-    Suite *rootSuite = [result objectAtIndex:0];
-    XCTAssertEqualObjects(@"root suite", rootSuite.name);
-    XCTAssertEqual(1, rootSuite.children.count);
-    XCTAssertTrue([rootSuite.children[0] isKindOfClass:[Suite class]]);
-    Suite *nestedSuite = rootSuite.children[0];
-    XCTAssertEqualObjects(@"nested suite", nestedSuite.name);
-    XCTAssertEqual(1, nestedSuite.children.count);
-    XCTAssertTrue([nestedSuite.children[0] isKindOfClass:[Spec class]]);
-    Spec *spec = nestedSuite.children[0];
-    XCTAssertEqualObjects(@"spec name", spec.name);
+    XCTAssertEqual([result count], 1);
+    
+    SuiteNode *rootSuite = result[0];
+    XCTAssertEqual(rootSuite.type, SuiteNodeTypeSuite);
+    XCTAssertEqualObjects(rootSuite.name, @"root suite");
+    XCTAssertNil(rootSuite.parent);
+    XCTAssertEqual(rootSuite.children.count, 1);
+    
+    SuiteNode *nestedSuite = rootSuite.children[0];
+    XCTAssertEqual(nestedSuite.type, SuiteNodeTypeSuite);
+    XCTAssertEqualObjects(nestedSuite.name, @"nested suite");
+    XCTAssertEqual(nestedSuite.parent, rootSuite); // reference equality
+    XCTAssertEqual(nestedSuite.children.count, 1);
+    
+    SuiteNode *spec = nestedSuite.children[0];
+    XCTAssertEqual(spec.type, SuiteNodeTypeSpec);
+    XCTAssertEqualObjects(spec.name, @"spec name");
+    XCTAssertEqual(nestedSuite, spec.parent); // reference equality
+    XCTAssertEqual(spec.children.count, 0);
 }
 
 @end

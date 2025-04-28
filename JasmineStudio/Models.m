@@ -7,50 +7,24 @@
 
 #import "Models.h"
 
-static SuiteNodeList *mapJsonObjects(NSArray *jsonObjects, NSError **error);
+static NSArray<SuiteNode *> *suiteNodesFromJsonArray(NSArray *jsonArray, NSError **error);
+static SuiteNode *suiteNodeFromJsonObject(NSDictionary *jsonObject, NSError **error);
 
+@implementation SuiteNode
 
-@implementation Suite
-
-- (instancetype)initWithName:(NSString *)name
-                    children:(SuiteNodeList *)children {
+- (instancetype)initWithType:(SuiteNodeType)type name:(NSString *)name {
     self = [super init];
     
     if (self) {
+        _type = type;
         _name = name;
-        _children = children;
+        _children = [NSMutableArray array];
     }
     
     return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone {
-    return [[[Suite class] alloc] initWithName:self.name children:self.children];
-}
-
-@end
-
-
-@implementation Spec
-
-- (instancetype)initWithName:(NSString *)name {
-    self = [super init];
-    
-    if (self) {
-        _name = name;
-        _children = [NSArray array];
-    }
-    
-    return self;
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    return [[[Spec class] alloc] initWithName:self.name];
-}
-
-@end
-
-SuiteNodeList *suiteNodesFromJson(NSData *jsonData, NSError **error) {
+NSArray<SuiteNode *> *suiteNodesFromJson(NSData *jsonData, NSError **error) {
     id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData
                                                     options:0
                                                       error:error];
@@ -64,38 +38,53 @@ SuiteNodeList *suiteNodesFromJson(NSData *jsonData, NSError **error) {
         return nil;
     }
     
-    return mapJsonObjects(jsonObject, error);
+    return suiteNodesFromJsonArray(jsonObject, error);
 }
 
-static SuiteNodeList *mapJsonObjects(NSArray *jsonObjects, NSError **error) {
-    NSUInteger n = jsonObjects.count;
-    NSMutableArray<id<SuiteNode>> *result = [NSMutableArray arrayWithCapacity:n];
+static NSArray<SuiteNode *> *suiteNodesFromJsonArray(NSArray *jsonArray, NSError **error) {
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:jsonArray.count];
     
-    for (NSUInteger i = 0; i < n; i++) {
-        if (![jsonObjects[i] isKindOfClass:[NSDictionary class]]) {
-            *error = [[NSError alloc] initWithDomain:@"JasmineStudio" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Expeected JSON array element to be a dictionary"}];
+    // TODO type check
+    for (NSDictionary *jsonObject in jsonArray) {
+        SuiteNode *newNode = suiteNodeFromJsonObject(jsonObject, error);
+        
+        if (!newNode) {
             return nil;
         }
         
-        // TODO lots more presence/type/error checking
-        NSString *description = [jsonObjects[i] valueForKey:@"description"];
-        NSString *type = [jsonObjects[i] valueForKey:@"type"];
-        id<SuiteNode> node;
-
-        if ([type isEqualToString:@"spec"]) {
-            node = [[Spec alloc] initWithName:description];
-        } else if ([type isEqualToString:@"suite"]) {
-            SuiteNodeList *children = mapJsonObjects([jsonObjects[i] valueForKey:@"children"], error);
-            
-            if (!children) {
-                return nil;
-            }
-            
-            node = [[Suite alloc] initWithName:description children:children];
-        }
-        
-        [result addObject:node];
+        [result addObject:newNode];
     }
     
     return result;
 }
+
+static SuiteNode *suiteNodeFromJsonObject(NSDictionary *jsonObject, NSError **error) {
+    NSString *type = jsonObject[@"type"];
+    NSString *name = jsonObject[@"description"]; // TODO check this
+    NSArray<SuiteNode *> *children;
+    
+    if ([type isEqualToString:@"suite"]) {
+        // TODO type/existence check children
+        children = suiteNodesFromJsonArray(jsonObject[@"children"], error);
+        
+        if (!children) {
+            return nil;
+        }
+        
+        SuiteNode *node = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:name];
+        [node.children addObjectsFromArray:children];
+        
+        for (SuiteNode *child in children) {
+            child.parent = node;
+        }
+        
+        return node;
+    } else if ([type isEqualToString:@"spec"]) {
+        return [[SuiteNode alloc] initWithType:SuiteNodeTypeSpec name:name];
+    } else {
+        // TODO report error
+        return nil;
+    }
+}
+
+@end

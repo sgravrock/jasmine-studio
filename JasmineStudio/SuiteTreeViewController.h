@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate, OutlineViewContextMenuDelegate>
-- (void)show:(SuiteNodeList *)roots;
+- (void)show:(NSArray<SuiteNode *> *)roots;
 @end
 
 NS_ASSUME_NONNULL_END

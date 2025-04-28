@@ -10,12 +10,12 @@
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet OutlineViewWithContextMenu *outlineView;
-@property (nonatomic, strong) SuiteNodeList *roots;
+@property (nonatomic, strong) NSArray<SuiteNode *> *roots;
 @end
 
 @implementation SuiteTreeViewController
 
-- (void)show:(SuiteNodeList *)roots {
+- (void)show:(NSArray<SuiteNode *> *)roots {
     self.roots = roots;
     [self.outlineView reloadData];
 }
@@ -29,29 +29,21 @@
 
     if (item == nil) {
         return self.roots.count;
-    } else if ([item isKindOfClass:[Suite class]]) {
-        return ((Suite *)item).children.count;
     } else {
-        return 0;
+        return ((SuiteNode *)item).children.count;
     }
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
     if (item == nil) {
         return self.roots[index];
-    } else if ([item isKindOfClass:[Suite class]]) {
-        return ((Suite *)item).children[index];
     } else {
-        return nil;
+        return ((SuiteNode *)item).children[index];
     }
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-    if ([item isKindOfClass:[Suite class]]) {
-        return ((Suite *)item).children.count > 0;
-    } else {
-        return NO;
-    }
+    return ((SuiteNode *)item).children.count > 0;
 }
 
 // Needed for data binding
@@ -72,7 +64,7 @@
 }
 
 - (void)handleRunMenuItem:(id)sender {
-    id<SuiteNode> target = ((NSMenuItem *)sender).representedObject;
+    SuiteNode *target = ((NSMenuItem *)sender).representedObject;
     NSLog(@"Would run %@", target.name);
 }
 

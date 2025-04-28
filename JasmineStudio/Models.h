@@ -9,28 +9,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol SuiteNode;
-typedef NSArray<id<SuiteNode>> SuiteNodeList;
+typedef enum {
+    SuiteNodeTypeSuite,
+    SuiteNodeTypeSpec
+} SuiteNodeType;
 
-@protocol SuiteNode <NSObject>
-- (NSString *)name;
-- (SuiteNodeList *)children;
-@end
 
-@interface Suite : NSObject<SuiteNode>
+@interface SuiteNode: NSObject
+
+@property (nonatomic, readonly, assign) SuiteNodeType type;
 @property (nonatomic, readonly, strong) NSString *name;
-@property (nonatomic, readonly, strong) SuiteNodeList *children;
-- (instancetype)initWithName:(NSString *)name
-                    children:(SuiteNodeList *)children;
+@property (nonatomic, weak) SuiteNode * _Nullable parent;
+@property (nonatomic, readonly, strong) NSMutableArray<SuiteNode *> *children;
+
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithType:(SuiteNodeType)type name:(NSString *)name;
+
 @end
 
-
-@interface Spec : NSObject<SuiteNode>
-@property (nonatomic, readonly, strong) NSString *name;
-@property (nonatomic, readonly, strong) SuiteNodeList *children;
-- (instancetype)initWithName:(NSString *)description;
-@end
-
-SuiteNodeList *suiteNodesFromJson(NSData *jsonData, NSError **error);
+NSArray<SuiteNode *> *suiteNodesFromJson(NSData *jsonData, NSError **error);
 
 NS_ASSUME_NONNULL_END
