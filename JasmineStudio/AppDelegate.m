@@ -9,11 +9,11 @@
 #import "ProjectSetupViewController.h"
 #import "RunnerViewController.h"
 #import "Jasmine.h"
+#import "ExternalCommandRunner.h"
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    
     NSStoryboard *sb = [NSStoryboard storyboardWithName:@"Main" bundle:nil];
     NSWindowController *setupWindowController = [sb instantiateControllerWithIdentifier:@"projectSetup"];
     ProjectSetupViewController *setupViewController = (ProjectSetupViewController *)setupWindowController.window.contentViewController;
@@ -27,7 +27,10 @@
         [setupWindowController.window close];
         NSWindowController *runnerWindowController = [sb instantiateControllerWithIdentifier:@"runnerWindowController"];
         RunnerViewController *runnerViewController = (RunnerViewController *)runnerWindowController.window.contentViewController;
-        runnerViewController.jasmine = [[Jasmine alloc] initWithBaseDir:projectBaseDir nodePath:nodePath];
+        runnerViewController.jasmine = [[Jasmine alloc]
+                                        initWithBaseDir:projectBaseDir
+                                        nodePath:nodePath
+                                        commandRunner:[[ExternalCommandRunner alloc] init]];
         [runnerViewController loadSuite];
         [runnerWindowController.window makeKeyAndOrderFront:self];
     };

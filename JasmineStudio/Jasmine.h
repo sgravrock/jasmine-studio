@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ExternalCommandRunner;
+
 typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSError  * _Nullable error);
 
 
@@ -18,7 +20,9 @@ typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSE
 @property (nonatomic, readonly, strong) NSString *baseDir;
 @property (nonatomic, readonly, strong) NSString *nodePath;
 
-- (instancetype)initWithBaseDir:(NSString *)baseDir nodePath:(NSString *)nodePath;
+- (instancetype)initWithBaseDir:(NSString *)baseDir
+                       nodePath:(NSString *)nodePath
+                  commandRunner:(ExternalCommandRunner *)commandRunner;
 - (void)enumerateWithCallback:(EnumerationCallback)callback;
 - (void)runNode:(SuiteNode *)node;
 

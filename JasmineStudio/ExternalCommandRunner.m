@@ -1,13 +1,13 @@
 //
-//  ExternalCommand.m
+//  ExternalCommandRunner.m
 //  JasmineStudio
 //
 //  Created by Stephen Gravrock on 4/20/25.
 //
 
-#import "ExternalCommand.h"
+#import "ExternalCommandRunner.h"
 
-@interface ExternalCommand()
+@interface ExternalCommand: NSObject
 // Configuration
 @property (atomic, strong) NSURL *executable;
 @property (atomic, strong) NSArray<NSString *> *args;
@@ -20,11 +20,17 @@
 @property (atomic, assign) int exitCode;
 @property (atomic, strong) NSData *output; // nil until all output is read
 @property (atomic, strong) NSError *readError;
+
+- (instancetype)initWithExecutable:(NSURL *)executable
+                              args:(NSArray<NSString *> *)args
+                  workingDirectory:(NSString *)cwd
+                 completionHandler:(ExternalCommandCompletionHandler)completionHandler;
+- (void)start;
 @end
 
-@implementation ExternalCommand
+@implementation ExternalCommandRunner
 
-+ (void)run:(NSString *)executablePath
+- (void)run:(NSString *)executablePath
    withArgs:(NSArray<NSString *> *)args
 inDirectory:(NSString *)cwd
 completionHandler:(ExternalCommandCompletionHandler)completionHandler {
@@ -35,6 +41,10 @@ completionHandler:(ExternalCommandCompletionHandler)completionHandler {
                             completionHandler:completionHandler];
     [cmd start];
 }
+
+@end
+
+@implementation ExternalCommand
 
 - (instancetype)initWithExecutable:(NSURL *)executable
                               args:(NSArray<NSString *> *)args

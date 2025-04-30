@@ -6,26 +6,33 @@
 //
 
 #import "Jasmine.h"
-#import "ExternalCommand.h"
+#import "ExternalCommandRunner.h"
+
+@interface Jasmine()
+@property (nonatomic, strong) ExternalCommandRunner *cmdRunner;
+@end
 
 @implementation Jasmine
 
-- (instancetype)initWithBaseDir:(NSString *)baseDir nodePath:(NSString *)nodePath {
+- (instancetype)initWithBaseDir:(NSString *)baseDir
+                       nodePath:(NSString *)nodePath
+                  commandRunner:(ExternalCommandRunner *)commandRunner {
     self = [super init];
     
     if (self) {
         _baseDir = baseDir;
         _nodePath = nodePath;
+        _cmdRunner = commandRunner;
     }
     
     return self;
 }
 
 - (void)enumerateWithCallback:(EnumerationCallback)callback {
-    [ExternalCommand run:self.nodePath
-                withArgs:@[[self jasmineExecutable], @"enumerate"]
-             inDirectory:self.baseDir
-       completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
+    [self.cmdRunner run:self.nodePath
+               withArgs:@[[self jasmineExecutable], @"enumerate"]
+            inDirectory:self.baseDir
+      completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
         if (error != nil) {
             callback(nil, error);
         } else if (exitCode != 0) {
@@ -41,7 +48,6 @@
 }
 
 - (void)runNode:(SuiteNode *)node {
-    // TODO: inject an ExternalCommand. This is getting to the point where tests would be good.
     NSError *error = nil;
     NSData *pathData = [NSJSONSerialization dataWithJSONObject:[node path]
                                                        options:0
@@ -57,12 +63,12 @@
                                                encoding:NSUTF8StringEncoding];
     // No need to escape anything since we're not using a shell
     NSString *arg = [NSString stringWithFormat:@"--filter-path=%@", pathJson];
-    [ExternalCommand run:self.nodePath
-                withArgs:@[[self jasmineExecutable], arg]
-             inDirectory:self.baseDir
-       completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
+    [self.cmdRunner run:self.nodePath
+               withArgs:@[[self jasmineExecutable], arg]
+            inDirectory:self.baseDir
+      completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
         NSLog(@"%d %@", exitCode, error);
-
+        
         if (output == nil) {
             NSLog(@"No output");
         } else {

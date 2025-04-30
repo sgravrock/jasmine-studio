@@ -1,5 +1,5 @@
 //
-//  ExternalCommand.h
+//  ExternalCommandRunner.h
 //  JasmineStudio
 //
 //  Created by Stephen Gravrock on 4/20/25.
@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^ExternalCommandCompletionHandler)(int exitCode,  NSData * _Nullable output, NSError * _Nullable error);
 
-@interface ExternalCommand : NSObject
+@interface ExternalCommandRunner : NSObject
 
-+ (void)run:(NSString *)executablePath withArgs:(NSArray<NSString *> *)args inDirectory:(NSString *)cwd completionHandler:(ExternalCommandCompletionHandler)completionHandler;
+- (void)run:(NSString *)executablePath withArgs:(NSArray<NSString *> *)args inDirectory:(NSString *)cwd completionHandler:(ExternalCommandCompletionHandler)completionHandler;
 
 @end
 
