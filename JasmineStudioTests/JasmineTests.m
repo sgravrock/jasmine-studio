@@ -21,8 +21,8 @@
                                                nodePath:@"myNodePath"
                                           commandRunner:cmdRunner];
     __block BOOL callbackCalled = NO;
-    __block NSArray<SuiteNode *> * receivedResult = nil;
-    __block NSError * receivedError = nil;
+    __block NSArray<SuiteNode *> *receivedResult = nil;
+    __block NSError *receivedError = nil;
     [subject enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
         callbackCalled = YES;
         receivedResult = result;
@@ -44,15 +44,25 @@
     XCTAssertEqualObjects(receivedResult[0].name, @"foo");
 }
 
-- (void)testRunNode {
+- (void)testRunNodeWithCallback {
     MockExternalCommandRunner *cmdRunner = [[MockExternalCommandRunner alloc] init];
     Jasmine *subject = [[Jasmine alloc] initWithBaseDir:@"myBaseDir"
                                                nodePath:@"myNodePath"
                                           commandRunner:cmdRunner];
     SuiteNode *node = [[StubSuiteNode alloc] initWithType:SuiteNodeTypeSpec
                                                      path:@[@"foo", @"bar", @"baz"]];
-    [subject runNode:node];
+    __block BOOL callbackCalled = NO;
+    __block BOOL receivedPassed = NO;
+    __block NSString * receivedOutput = nil;
+    __block NSError *receivedError = nil;
+    [subject runNode:node withCallback:^(BOOL passed, NSString * _Nullable output, NSError * _Nullable error) {
+        callbackCalled = YES;
+        receivedPassed = passed;
+        receivedOutput = output;
+        receivedError = error;
+    }];
     
+    XCTAssertFalse(callbackCalled);
     XCTAssertEqualObjects(cmdRunner.lastExecutablePath, @"myNodePath");
     XCTAssertEqualObjects(cmdRunner.lastCwd, @"myBaseDir");
     NSArray *expectedArgs = @[
@@ -60,7 +70,14 @@
         @"--filter-path=[\"foo\",\"bar\",\"baz\"]"
     ];
     XCTAssertEqualObjects(cmdRunner.lastArgs, expectedArgs);
-    // TODO: test output handling, once we can actually observe it
+
+    // For now, output is just passed through
+    cmdRunner.lastCompletionHandler(0, [@"hello" dataUsingEncoding:NSUTF8StringEncoding], nil);
+    
+    XCTAssertTrue(callbackCalled);
+    XCTAssertTrue(receivedPassed);
+    XCTAssertNil(receivedError);
+    XCTAssertEqualObjects(receivedOutput, @"hello");
 }
 
 @end

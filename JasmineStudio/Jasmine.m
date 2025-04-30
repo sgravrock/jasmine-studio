@@ -47,7 +47,7 @@
     }];
 }
 
-- (void)runNode:(SuiteNode *)node {
+- (void)runNode:(SuiteNode *)node withCallback:(RunCallback)callback {
     NSError *error = nil;
     NSData *pathData = [NSJSONSerialization dataWithJSONObject:[node path]
                                                        options:0
@@ -67,13 +67,12 @@
                withArgs:@[[self jasmineExecutable], arg]
             inDirectory:self.baseDir
       completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
-        NSLog(@"%d %@", exitCode, error);
-        
-        if (output == nil) {
-            NSLog(@"No output");
+        if (error != nil) {
+            callback(NO, nil, error);
         } else {
-            NSLog(@"Output: %@", [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding]);
-        }
+            NSString *outputString = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
+            callback(exitCode == 0, outputString, nil);
+        }        
     }];
 }
 

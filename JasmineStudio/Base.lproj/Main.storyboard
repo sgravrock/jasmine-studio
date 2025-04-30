@@ -899,7 +899,7 @@
                 <splitViewController id="Gd0-v1-QAp" customClass="RunnerViewController" sceneMemberID="viewController">
                     <splitViewItems>
                         <splitViewItem id="S91-57-iNu"/>
-                        <splitViewItem collapsed="YES" id="RVu-cN-fJc"/>
+                        <splitViewItem id="RVu-cN-fJc"/>
                     </splitViewItems>
                     <splitView key="splitView" dividerStyle="thin" id="SBD-zS-BcK">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
@@ -918,14 +918,51 @@
             </objects>
             <point key="canvasLocation" x="1155" y="657"/>
         </scene>
-        <!--View Controller-->
+        <!--Output View Controller-->
         <scene sceneID="zjG-LB-SEQ">
             <objects>
-                <viewController id="Kkt-2Z-o35" sceneMemberID="viewController">
+                <viewController id="Kkt-2Z-o35" customClass="OutputViewController" sceneMemberID="viewController">
                     <view key="view" id="miI-51-QGB">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="180"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pxb-2N-1Yr">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="180"/>
+                                <clipView key="contentView" drawsBackground="NO" id="grX-Lr-wA3">
+                                    <rect key="frame" x="0.0" y="0.0" width="435" height="180"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Bou-98-w2d">
+                                            <rect key="frame" x="0.0" y="0.0" width="435" height="180"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="435" height="180"/>
+                                            <size key="maxSize" width="435" height="10000000"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="OXb-lm-XBi">
+                                    <rect key="frame" x="-100" y="-100" width="225" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="sSM-GG-Csi">
+                                    <rect key="frame" x="435" y="0.0" width="15" height="180"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Pxb-2N-1Yr" secondAttribute="bottom" id="ZsY-TL-a3W"/>
+                            <constraint firstItem="Pxb-2N-1Yr" firstAttribute="top" secondItem="miI-51-QGB" secondAttribute="top" id="tkA-d5-ovB"/>
+                            <constraint firstItem="Pxb-2N-1Yr" firstAttribute="leading" secondItem="miI-51-QGB" secondAttribute="leading" id="x0F-wx-g1M"/>
+                            <constraint firstAttribute="trailing" secondItem="Pxb-2N-1Yr" secondAttribute="trailing" id="zHP-Lr-JMk"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="outputTextView" destination="Bou-98-w2d" id="3Mm-An-PlT"/>
+                        <outlet property="scrollView" destination="Pxb-2N-1Yr" id="Dxm-aY-nLS"/>
+                    </connections>
                 </viewController>
                 <customObject id="PQt-bx-7xg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
