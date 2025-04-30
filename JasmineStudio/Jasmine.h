@@ -20,6 +20,7 @@ typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSE
 
 - (instancetype)initWithBaseDir:(NSString *)baseDir nodePath:(NSString *)nodePath;
 - (void)enumerateWithCallback:(EnumerationCallback)callback;
+- (void)runNode:(SuiteNode *)node;
 
 @end
 

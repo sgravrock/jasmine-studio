@@ -65,7 +65,7 @@
 
 - (void)handleRunMenuItem:(id)sender {
     SuiteNode *target = ((NSMenuItem *)sender).representedObject;
-    NSLog(@"Would run %@", target.name);
+    [self.delegate suiteTreeViewController:self runNode:target];
 }
 
 @end

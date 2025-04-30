@@ -11,7 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SuiteTreeViewController;
+
+@protocol SuiteTreeViewControllerDelegate
+- (void)suiteTreeViewController:(SuiteTreeViewController *)sender runNode:(SuiteNode *)node;
+@end
+
 @interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate, OutlineViewContextMenuDelegate>
+@property (nonatomic, weak) id<SuiteTreeViewControllerDelegate> delegate;
 - (void)show:(NSArray<SuiteNode *> *)roots;
 @end
 

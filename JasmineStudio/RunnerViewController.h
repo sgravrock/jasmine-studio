@@ -7,10 +7,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Jasmine.h"
+#import "SuiteTreeViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RunnerViewController : NSSplitViewController
+@interface RunnerViewController : NSSplitViewController<SuiteTreeViewControllerDelegate>
 
 @property (nonatomic, strong) Jasmine *jasmine;
 - (void)loadSuite;

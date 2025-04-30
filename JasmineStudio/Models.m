@@ -24,6 +24,17 @@ static SuiteNode *suiteNodeFromJsonObject(NSDictionary *jsonObject, NSError **er
     return self;
 }
 
+- (NSArray<NSString *> *)path {
+    if (!self.parent) {
+        return @[self.name];
+    }
+    
+    return [[self.parent path] arrayByAddingObject:self.name];    
+}
+
+@end
+
+
 NSArray<SuiteNode *> *suiteNodesFromJson(NSData *jsonData, NSError **error) {
     id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData
                                                     options:0
@@ -86,5 +97,3 @@ static SuiteNode *suiteNodeFromJsonObject(NSDictionary *jsonObject, NSError **er
         return nil;
     }
 }
-
-@end

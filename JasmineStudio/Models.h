@@ -25,6 +25,8 @@ typedef enum {
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithType:(SuiteNodeType)type name:(NSString *)name;
 
+- (NSArray<NSString *> *)path;
+
 @end
 
 NSArray<SuiteNode *> *suiteNodesFromJson(NSData *jsonData, NSError **error);

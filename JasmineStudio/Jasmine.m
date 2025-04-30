@@ -40,9 +40,39 @@
     }];
 }
 
+- (void)runNode:(SuiteNode *)node {
+    // TODO: inject an ExternalCommand. This is getting to the point where tests would be good.
+    NSError *error = nil;
+    NSData *pathData = [NSJSONSerialization dataWithJSONObject:[node path]
+                                                       options:0
+                                                         error:&error];
+    
+    if (!pathData) {
+        // TODO report this properly
+        NSLog(@"JSON serialization failed: %@", [error localizedDescription]);
+        return;
+    }
+    
+    NSString *pathJson = [[NSString alloc] initWithData:pathData
+                                               encoding:NSUTF8StringEncoding];
+    // No need to escape anything since we're not using a shell
+    NSString *arg = [NSString stringWithFormat:@"--filter-path=%@", pathJson];
+    [ExternalCommand run:self.nodePath
+                withArgs:@[[self jasmineExecutable], arg]
+             inDirectory:self.baseDir
+       completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
+        NSLog(@"%d %@", exitCode, error);
+
+        if (output == nil) {
+            NSLog(@"No output");
+        } else {
+            NSLog(@"Output: %@", [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding]);
+        }
+    }];
+}
+
 - (NSString *)jasmineExecutable {
     return [self.baseDir stringByAppendingPathComponent:@"node_modules/.bin/jasmine"];
 }
-
 
 @end

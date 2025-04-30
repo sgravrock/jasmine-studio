@@ -6,7 +6,6 @@
 //
 
 #import "RunnerViewController.h"
-#import "SuiteTreeViewController.h"
 
 @interface RunnerViewController ()
 @property (nonatomic, weak) SuiteTreeViewController *treeViewController;
@@ -17,6 +16,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.treeViewController = (SuiteTreeViewController *)self.splitViewItems[0].viewController;
+    self.treeViewController.delegate = self;
 }
 
 - (void)loadSuite {
@@ -31,5 +31,11 @@
         }
     }];
 }
+
+- (void)suiteTreeViewController:(nonnull SuiteTreeViewController *)sender
+                        runNode:(nonnull SuiteNode *)node {
+    [self.jasmine runNode:node];
+}
+
 
 @end

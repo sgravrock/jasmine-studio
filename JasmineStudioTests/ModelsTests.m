@@ -60,4 +60,19 @@
     XCTAssertEqual(spec.children.count, 0);
 }
 
+- (void)testPathForRootNode {
+    SuiteNode *node = [[SuiteNode alloc] initWithType:SuiteNodeTypeSpec name:@"foo"];
+    XCTAssertEqualObjects([node path], @[@"foo"]);
+}
+
+- (void)testPathForNonRootNode {
+    SuiteNode *target = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:@"baz"];
+    SuiteNode *parent = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:@"bar"];
+    SuiteNode *root = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:@"foo"];
+    target.parent = parent;
+    parent.parent = root;
+    NSArray *expectedPath = @[@"foo", @"bar", @"baz"];
+    XCTAssertEqualObjects([target path], expectedPath);
+}
+
 @end
