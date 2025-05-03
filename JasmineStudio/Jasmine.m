@@ -7,6 +7,7 @@
 
 #import "Jasmine.h"
 #import "ExternalCommandRunner.h"
+#import "ProjectConfig.h"
 
 @interface Jasmine()
 @property (nonatomic, strong) ExternalCommandRunner *cmdRunner;
@@ -14,14 +15,11 @@
 
 @implementation Jasmine
 
-- (instancetype)initWithBaseDir:(NSString *)baseDir
-                       nodePath:(NSString *)nodePath
-                  commandRunner:(ExternalCommandRunner *)commandRunner {
+- (instancetype)initWithConfig:(ProjectConfig *)config commandRunner:(ExternalCommandRunner *)commandRunner {
     self = [super init];
     
     if (self) {
-        _baseDir = baseDir;
-        _nodePath = nodePath;
+        _config = config;
         _cmdRunner = commandRunner;
     }
     
@@ -29,9 +27,10 @@
 }
 
 - (void)enumerateWithCallback:(EnumerationCallback)callback {
-    [self.cmdRunner run:self.nodePath
+    [self.cmdRunner run:self.config.nodePath
                withArgs:@[[self jasmineExecutable], @"enumerate"]
-            inDirectory:self.baseDir
+                   path:self.config.path
+       workingDirectory:self.config.projectBaseDir
       completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
         if (error != nil) {
             callback(nil, error);
@@ -63,9 +62,10 @@
                                                encoding:NSUTF8StringEncoding];
     // No need to escape anything since we're not using a shell
     NSString *arg = [NSString stringWithFormat:@"--filter-path=%@", pathJson];
-    [self.cmdRunner run:self.nodePath
+    [self.cmdRunner run:self.config.nodePath
                withArgs:@[[self jasmineExecutable], arg]
-            inDirectory:self.baseDir
+                   path:self.config.path
+       workingDirectory:self.config.projectBaseDir
       completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
         if (error != nil) {
             callback(NO, nil, error);
@@ -77,7 +77,7 @@
 }
 
 - (NSString *)jasmineExecutable {
-    return [self.baseDir stringByAppendingPathComponent:@"node_modules/.bin/jasmine"];
+    return [self.config.projectBaseDir stringByAppendingPathComponent:@"node_modules/.bin/jasmine"];
 }
 
 @end

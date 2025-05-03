@@ -1,11 +1,11 @@
 //
-//  Models.m
+//  SuiteNode.m
 //  JasmineStudio
 //
 //  Created by Stephen Gravrock on 4/21/25.
 //
 
-#import "Models.h"
+#import "SuiteNode.h"
 
 static NSArray<SuiteNode *> *suiteNodesFromJsonArray(NSArray *jsonArray, NSError **error);
 static SuiteNode *suiteNodeFromJsonObject(NSDictionary *jsonObject, NSError **error);

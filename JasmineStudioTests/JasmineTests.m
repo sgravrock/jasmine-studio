@@ -9,6 +9,7 @@
 #import "Jasmine.h"
 #import "MockExternalCommandRunner.h"
 #import "StubSuiteNode.h"
+#import "ProjectConfig.h"
 
 @interface JasmineTests : XCTestCase
 @end
@@ -17,9 +18,11 @@
 
 - (void)testEnumerateWithCallback {
     MockExternalCommandRunner *cmdRunner = [[MockExternalCommandRunner alloc] init];
-    Jasmine *subject = [[Jasmine alloc] initWithBaseDir:@"myBaseDir"
-                                               nodePath:@"myNodePath"
-                                          commandRunner:cmdRunner];
+    ProjectConfig *config = [[ProjectConfig alloc] initWithPath:@"myPath"
+                                                       nodePath:@"myNodePath"
+                                                 projectBaseDir:@"myBaseDir"];
+    Jasmine *subject = [[Jasmine alloc] initWithConfig:config
+                                         commandRunner:cmdRunner];
     __block BOOL callbackCalled = NO;
     __block NSArray<SuiteNode *> *receivedResult = nil;
     __block NSError *receivedError = nil;
@@ -46,9 +49,11 @@
 
 - (void)testRunNodeWithCallback {
     MockExternalCommandRunner *cmdRunner = [[MockExternalCommandRunner alloc] init];
-    Jasmine *subject = [[Jasmine alloc] initWithBaseDir:@"myBaseDir"
-                                               nodePath:@"myNodePath"
-                                          commandRunner:cmdRunner];
+    ProjectConfig *config = [[ProjectConfig alloc] initWithPath:@"myPath"
+                                                       nodePath:@"myNodePath"
+                                                 projectBaseDir:@"myBaseDir"];
+    Jasmine *subject = [[Jasmine alloc] initWithConfig:config
+                                         commandRunner:cmdRunner];
     SuiteNode *node = [[StubSuiteNode alloc] initWithType:SuiteNodeTypeSpec
                                                      path:@[@"foo", @"bar", @"baz"]];
     __block BOOL callbackCalled = NO;

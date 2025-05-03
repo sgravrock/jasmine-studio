@@ -9,8 +9,11 @@
 
 @implementation MockExternalCommandRunner
 
-- (void)run:(NSString *)executablePath withArgs:(NSArray<NSString *> *)args inDirectory:(NSString *)cwd completionHandler:(ExternalCommandCompletionHandler)completionHandler {
-    
+- (void)run:(NSString *)executablePath
+   withArgs:(NSArray<NSString *> *)args
+       path:(NSString *)path
+workingDirectory:(NSString *)cwd
+completionHandler:(ExternalCommandCompletionHandler)completionHandler {
     self.lastExecutablePath = executablePath;
     self.lastArgs = args;
     self.lastCwd = cwd;

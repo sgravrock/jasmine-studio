@@ -29,7 +29,7 @@
     [self.jasmine enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
         if (error != nil) {
             // TODO
-            NSLog(@"oh no");
+            NSLog(@"Enumeration failed: %@", [error localizedDescription]);
         } else {
             // TODO: set self.treeViewController before this
             [weakSelf.treeViewController show:result];

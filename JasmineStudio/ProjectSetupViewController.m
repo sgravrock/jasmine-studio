@@ -8,17 +8,20 @@
 #import "ProjectSetupViewController.h"
 #import "config.h"
 #import "userDefaults.h"
+#import "ExternalCommandRunner.h"
+#import "ProjectConfig.h"
 
 @interface ProjectSetupViewController ()
 
 @property (nonatomic, strong) NSUserDefaults *userDefaults;
 
 @property (nonatomic, strong) NSString *projectBaseDir;
-- (NSString *)nodePath;
+- (NSString *)path;
 
 // These are expensive enough that we don't want to recalculate them unless something has changed.
+@property (nonatomic, strong) NSString *nodePath;
 @property (nonatomic, assign) BOOL hasValidProjectBaseDir;
-@property (nonatomic, assign) BOOL hasValidNodePath;
+@property (nonatomic, assign) BOOL hasValidPath;
 
 @end
 
@@ -35,7 +38,10 @@
 
 - (IBAction)ok:(id)sender {
     [self saveUserDefaults];
-    self.onOk(self.projectBaseDir, self.nodePath);
+    ProjectConfig *config = [[ProjectConfig alloc] initWithPath:self.path
+                                                       nodePath:self.nodePath
+                                                 projectBaseDir:self.projectBaseDir];
+    self.onOk(config);
 }
 
 - (IBAction)selectProjectBaseDir:(id)sender {
@@ -55,8 +61,8 @@
     }];
 }
 
-- (NSString *)nodePath {
-    return self.nodePathField.stringValue;
+- (NSString *)path {
+    return self.pathField.stringValue;
 }
 
 #pragma mark - NSTextFieldDelegate
@@ -67,7 +73,7 @@
 // the way to do it would be to check which field is a superview of
 // notification.userInfo[@"NSFieldEditor"].
 - (void)controlTextDidChange:(NSNotification *)notification NS_SWIFT_UI_ACTOR {
-    [self validateNodePath];
+    [self validatePath];
 }
 
 #pragma mark - Validation
@@ -86,35 +92,71 @@
     }
 
     self.projectBaseDirStateIndicator.image = img;
-    self.okButton.enabled = self.hasValidProjectBaseDir && self.hasValidNodePath;
+    [self updateOkButton];
 }
 
 
-- (void)validateNodePath {
-    self.hasValidNodePath = isValidNodePath(self.nodePath);
-    NSImage *img;
+- (void)validatePath {
+    // TODO: allow empty? Pre-populate with existing PATH?
+    NSLog(@"in validatePath: %@", self.path);
+    if (self.path.length == 0) {
+        self.hasValidPath = NO;
+        self.nodePath = nil;
+        [self pathValidityDidChange];
+        return;
+    }
     
-    if (self.hasValidNodePath) {
+    // The path is considered valid if we can find a Node executable in it
+    ExternalCommandRunner *runner = [[ExternalCommandRunner alloc] init];
+    __weak ProjectSetupViewController *weakSelf = self;
+    [runner run:@"/usr/bin/which"
+       withArgs:@[@"node"]
+           path:self.path
+workingDirectory:@"/"
+completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
+        NSString *outputString = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
+        NSLog(@"code: %d, output: %@", exitCode, outputString);
+        NSLog(@"Error: %@", [error localizedDescription]);
+        weakSelf.hasValidPath = exitCode == 0;
+    
+        if (weakSelf.hasValidPath) {
+            NSString *s = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
+            NSCharacterSet *newline = [NSCharacterSet characterSetWithCharactersInString:@"\n"];
+            weakSelf.nodePath = [s stringByTrimmingCharactersInSet:newline];
+        }
+
+        [weakSelf pathValidityDidChange];
+    }];
+}
+
+- (void)pathValidityDidChange {
+    NSImage *img;
+
+    if (self.hasValidPath) {
         img = [NSImage imageWithSystemSymbolName:@"checkmark.circle.fill"
                         accessibilityDescription:@"Node path OK"];
     } else {
-        // TODO: provide more specific help than this
         img = [NSImage imageNamed:NSImageNameCaution];
-        img.accessibilityDescription = @"Invalid project base dir";
+        img.accessibilityDescription = @"Invalid PATH";
     }
 
     self.nodePathStatusIndicator.image = img;
-    self.okButton.enabled = self.hasValidProjectBaseDir && self.hasValidNodePath;
+    self.nodePathStatusMsg.hidden = self.hasValidPath;
+    [self updateOkButton];
+}
+
+- (void)updateOkButton {
+    self.okButton.enabled = self.hasValidProjectBaseDir && self.hasValidPath;
 }
 
 - (void)saveUserDefaults {
     [self.userDefaults setObject:self.projectBaseDir forKey:kProjectBaseDirKey];
-    [self.userDefaults setObject:self.nodePath forKey:kNodePathKey];
+    [self.userDefaults setObject:self.path forKey:kPathKey];
 }
 
 - (void)restoreUserDefaults {
     id projectBaseDir = [self.userDefaults objectForKey:kProjectBaseDirKey];
-    id nodePath = [self.userDefaults objectForKey:kNodePathKey];
+    id path = [self.userDefaults objectForKey:kPathKey];
     
     if ([projectBaseDir isKindOfClass:[NSString class]]) {
         self.projectBaseDir = projectBaseDir;
@@ -122,9 +164,9 @@
         [self validateProjectBaseDir];
     }
     
-    if ([nodePath isKindOfClass:[NSString class]]) {
-        self.nodePathField.stringValue = nodePath;
-        [self validateNodePath];
+    if ([path isKindOfClass:[NSString class]]) {
+        self.pathField.stringValue = path;
+        [self validatePath];
     }
 }
 

@@ -16,7 +16,11 @@ typedef void (^ExternalCommandCompletionHandler)(int exitCode,  NSData * _Nullab
 
 @interface ExternalCommandRunner : NSObject
 
-- (void)run:(NSString *)executablePath withArgs:(NSArray<NSString *> *)args inDirectory:(NSString *)cwd completionHandler:(ExternalCommandCompletionHandler)completionHandler;
+- (void)run:(NSString *)executablePath
+   withArgs:(NSArray<NSString *> *)args
+       path:(NSString *)path
+workingDirectory:(NSString *)cwd
+completionHandler:(ExternalCommandCompletionHandler)completionHandler;
 
 @end
 

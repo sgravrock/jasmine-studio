@@ -6,10 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Models.h"
+#import "SuiteNode.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ProjectConfig;
 @class ExternalCommandRunner;
 
 typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSError  * _Nullable error);
@@ -23,12 +24,10 @@ typedef void (^RunCallback)(BOOL passed, NSString * _Nullable output, NSError * 
 
 @interface Jasmine : NSObject
 
-@property (nonatomic, readonly, strong) NSString *baseDir;
-@property (nonatomic, readonly, strong) NSString *nodePath;
+@property (nonatomic, readonly, strong) ProjectConfig *config;
 
-- (instancetype)initWithBaseDir:(NSString *)baseDir
-                       nodePath:(NSString *)nodePath
-                  commandRunner:(ExternalCommandRunner *)commandRunner;
+- (instancetype)initWithConfig:(ProjectConfig *)config
+                 commandRunner:(ExternalCommandRunner *)commandRunner;
 - (void)enumerateWithCallback:(EnumerationCallback)callback;
 - (void)runNode:(SuiteNode *)node withCallback:(RunCallback)callback;
 

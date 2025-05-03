@@ -78,6 +78,7 @@ of porting later on.
 To run Jasmine, several pieces of information are needed:
 
 * The path to the Node executable
+* The value to use for the PATH environment variable.
 * The path to the project root directory (the one that paths in the Jasmine
   config file will be evaluated relative to)
 * The path to the Jasmine config file
@@ -88,27 +89,33 @@ nonstandard path, often via a version manager like nvm that allows the user to
 switch between versions of Node. In a coommand line application that could be
 handled by `execvp`, running `which node`, or other mechanisms that rely on the
 `PATH` environment variable. But that won't work because GUI applications don't
-inherit the user's shell environment. So it's necessary to ask the user.
+inherit the user's shell environment. So it's necessary to get it some other 
+way. One option is to simply ask the user for the path to Node. But in many
+cases the user's test suite is also going to depend on elements of `PATH` that
+are present in the user's shell environment but not ina GUI application. So it
+makes sense to simply ask for `PATH` and assume that `node` is in it.
 
 The three Jasmine-related properties can be reduced to one: the path to the 
 project root directory. That won't work in valid but unusual setups such as
 multi-project monorepos and config files in nonstandard locations, but it's
 probably fine to ignore those for the foreseeable future.
 
-That leaves two pieces of information needed: the project root dir and the path
-to Node. Jasmine Studio should interactively prompt for both of those at
-startup. A command line launcher that takes a project root dir (or assumes the
-current working dir), finds Node via `PATH`, and invokes Jasmine Studio might
-also be a nice addition.
+That leaves two pieces of information needed: the project root dir and `PATH`.
+Jasmine Studio should interactively prompt for both of those at startup.
 
 That suggests a startup sequence like this:
 
 1. AppDelegate opens a project setup window.
 2. Project setup window gives the user a chance to enter the project base dir
-   and Node path.
+   and PATH.
 3. When the user clicks OK, the paths are validated. If correct, the setup
    window is closed and the main window is opened.
 
+A command line launcher that takes a project root dir (or assumes the
+current working dir), and passes that plus its environment to Jasmine Studio
+would be a nice addition. It would effectively provide zero-configuration launch:
+If running `jasmine` in a given directory works, so would running 
+`jasmine-studio`.
 
 ## Runner UI structure
 

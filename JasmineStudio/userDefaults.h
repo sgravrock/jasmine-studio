@@ -8,7 +8,7 @@
 #ifndef userDefaults_h
 #define userDefaults_h
 
-#define kNodePathKey @"nodePath"
+#define kPathKey @"path"
 #define kProjectBaseDirKey @"projectBaseDir"
 
 #endif /* userDefaults_h */

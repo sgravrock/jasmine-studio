@@ -7,7 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "OutlineViewWithContextMenu.h"
-#import "Models.h"
+#import "SuiteNode.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

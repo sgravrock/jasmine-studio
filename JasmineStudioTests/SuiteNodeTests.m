@@ -1,12 +1,12 @@
 //
-//  ModelsTests.m
+//  SuiteNodeTests.m
 //  JasmineStudioTests
 //
 //  Created by Stephen Gravrock on 4/21/25.
 //
 
 #import <XCTest/XCTest.h>
-#import "Models.h"
+#import "SuiteNode.h"
 
 @interface ModelsTests : XCTestCase
 

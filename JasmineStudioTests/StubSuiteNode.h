@@ -5,7 +5,7 @@
 //  Created by Stephen Gravrock on 4/29/25.
 //
 
-#import "Models.h"
+#import "SuiteNode.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

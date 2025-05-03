@@ -23,14 +23,11 @@
         exit(0);
     };
     
-    setupViewController.onOk = ^(NSString * _Nonnull projectBaseDir, NSString * _Nonnull nodePath) {
+    setupViewController.onOk = ^(ProjectConfig * _Nonnull config) {
         [setupWindowController.window close];
         NSWindowController *runnerWindowController = [sb instantiateControllerWithIdentifier:@"runnerWindowController"];
         RunnerViewController *runnerViewController = (RunnerViewController *)runnerWindowController.window.contentViewController;
-        runnerViewController.jasmine = [[Jasmine alloc]
-                                        initWithBaseDir:projectBaseDir
-                                        nodePath:nodePath
-                                        commandRunner:[[ExternalCommandRunner alloc] init]];
+        runnerViewController.jasmine = [[Jasmine alloc] initWithConfig:config commandRunner:[[ExternalCommandRunner alloc] init]];
         [runnerViewController loadSuite];
         [runnerWindowController.window makeKeyAndOrderFront:self];
     };

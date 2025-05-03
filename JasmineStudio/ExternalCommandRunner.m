@@ -11,6 +11,7 @@
 // Configuration
 @property (atomic, strong) NSURL *executable;
 @property (atomic, strong) NSArray<NSString *> *args;
+@property (atomic, strong) NSDictionary *env;
 @property (atomic, strong) NSString *cwd;
 @property (atomic, strong) ExternalCommandCompletionHandler completionHandler;
 
@@ -23,6 +24,7 @@
 
 - (instancetype)initWithExecutable:(NSURL *)executable
                               args:(NSArray<NSString *> *)args
+                              path:(NSString *)path
                   workingDirectory:(NSString *)cwd
                  completionHandler:(ExternalCommandCompletionHandler)completionHandler;
 - (void)start;
@@ -32,11 +34,13 @@
 
 - (void)run:(NSString *)executablePath
    withArgs:(NSArray<NSString *> *)args
-inDirectory:(NSString *)cwd
+       path:(NSString *)path
+workingDirectory:(NSString *)cwd
 completionHandler:(ExternalCommandCompletionHandler)completionHandler {
     ExternalCommand *cmd = [[ExternalCommand alloc]
                             initWithExecutable:[NSURL fileURLWithPath:executablePath]
                             args:args
+                            path:path
                             workingDirectory:cwd
                             completionHandler:completionHandler];
     [cmd start];
@@ -48,11 +52,15 @@ completionHandler:(ExternalCommandCompletionHandler)completionHandler {
 
 - (instancetype)initWithExecutable:(NSURL *)executable
                               args:(NSArray<NSString *> *)args
+                              path:(NSString *)path
                   workingDirectory:(NSString *)cwd
                  completionHandler:(ExternalCommandCompletionHandler)completionHandler {
     self = [[ExternalCommand alloc] init];
     self.executable = executable;
     self.args = args;
+    NSMutableDictionary *env = [NSMutableDictionary dictionaryWithDictionary:[[NSProcessInfo processInfo] environment]];
+    [env setObject:path forKey:@"PATH"];
+    self.env = env;
     self.cwd = cwd;
     self.completionHandler = completionHandler;
     self.doneReading = self.exited = NO;
@@ -66,6 +74,7 @@ completionHandler:(ExternalCommandCompletionHandler)completionHandler {
     NSTask *task = [[NSTask alloc] init];
     task.executableURL = self.executable;
     task.arguments = self.args;
+    task.environment = self.env;
     task.currentDirectoryPath = self.cwd;
     
     // Interleave stdout and stderr. That's much more useful for reading test suite output becuase the user will see console.error output in the context of adjacent console.log calls. This could be made configurable if there's ever a caller that needs to process stdout and stderr separately.

@@ -13,7 +13,7 @@
 @interface ProjectSetupViewControllerTests : XCTestCase
 @property (nonatomic, strong) ProjectSetupViewController *subject;
 @property (nonatomic, strong) NSTextField *projectBaseDirLabel;
-@property (nonatomic, strong) NSTextField *nodePathField;
+@property (nonatomic, strong) NSTextField *pathField;
 @property (nonatomic, strong) InMemoryUserDefaults *userDefaults;
 @end
 
@@ -21,9 +21,9 @@
 
 - (void)setUp {
     self.subject = [[ProjectSetupViewController alloc] init];
-    self.nodePathField = [[NSTextField alloc] init];
+    self.pathField = [[NSTextField alloc] init];
     self.projectBaseDirLabel = [[NSTextField alloc] init];
-    self.subject.nodePathField = self.nodePathField;
+    self.subject.pathField = self.pathField;
     self.subject.projectBaseDirLabel = self.projectBaseDirLabel;
     self.userDefaults = [[InMemoryUserDefaults alloc] init];
 }
@@ -46,21 +46,21 @@
 }
 
 
-- (void)testRestoresNodePath {
-    [self.userDefaults setObject:@"test node path" forKey:kNodePathKey];
+- (void)testRestoresPath {
+    [self.userDefaults setObject:@"test path" forKey:kPathKey];
     [self.subject configureWithUserDefaults:self.userDefaults];
-    XCTAssertEqualObjects(self.nodePathField.stringValue, @"test node path");
+    XCTAssertEqualObjects(self.pathField.stringValue, @"test path");
 }
 
-- (void)testHandlesMissingNodePathKey {
+- (void)testHandlesMissingPathKey {
     [self.subject configureWithUserDefaults:self.userDefaults];
-    XCTAssertEqualObjects(self.nodePathField.stringValue, @"");
+    XCTAssertEqualObjects(self.pathField.stringValue, @"");
 }
 
-- (void)testIgnoresNonStringNodePathKey {
-    [self.userDefaults setObject:[NSArray array] forKey:kNodePathKey];
+- (void)testIgnoresNonStringPathKey {
+    [self.userDefaults setObject:[NSArray array] forKey:kPathKey];
     [self.subject configureWithUserDefaults:self.userDefaults];
-    XCTAssertEqualObjects(self.nodePathField.stringValue, @"");
+    XCTAssertEqualObjects(self.pathField.stringValue, @"");
 }
 
 @end
