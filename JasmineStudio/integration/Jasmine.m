@@ -46,7 +46,7 @@
     }];
 }
 
-- (void)runNode:(SuiteNode *)node withCallback:(RunCallback)callback {
+- (void)runNode:(SuiteNode *)node  {
     NSError *error = nil;
     NSData *pathData = [NSJSONSerialization dataWithJSONObject:[node path]
                                                        options:0
@@ -60,24 +60,48 @@
     
     NSString *pathJson = [[NSString alloc] initWithData:pathData
                                                encoding:NSUTF8StringEncoding];
-    // No need to escape anything since we're not using a shell
-    NSString *arg = [NSString stringWithFormat:@"--filter-path=%@", pathJson];
-    [self.cmdRunner run:self.config.nodePath
-               withArgs:@[[self jasmineExecutable], arg]
-                   path:self.config.path
-       workingDirectory:self.config.projectBaseDir
-      completionHandler:^(int exitCode, NSData * _Nullable output, NSError * _Nullable error) {
-        if (error != nil) {
-            callback(NO, nil, error);
-        } else {
-            NSString *outputString = [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding];
-            callback(exitCode == 0, outputString, nil);
-        }        
-    }];
+    NSString *reporterPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"jasmineStudioReporter.js"];
+    NSArray<NSString *> *args = @[
+        [self jasmineExecutable],
+        // No need to escape anything since we're not using a shell
+        [NSString stringWithFormat:@"--filter-path=%@", pathJson],
+        [NSString stringWithFormat:@"--reporter=%@", reporterPath]
+    ];
+    [self.cmdRunner stream:self.config.nodePath
+                  withArgs:args
+                      path:self.config.path
+          workingDirectory:self.config.projectBaseDir
+                  delegate:self];
 }
 
 - (NSString *)jasmineExecutable {
     return [self.config.projectBaseDir stringByAppendingPathComponent:@"node_modules/.bin/jasmine"];
+}
+
+#pragma mark - StreamingExecutionDelegate
+
+- (void)streamingExecution:(nonnull StreamingExecution *)sender
+         finishedWithError:(nonnull NSError *)error {
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.delegate jasmine:self runFailedWithError:error];
+    });
+}
+
+- (void)streamingExecution:(nonnull StreamingExecution *)sender
+      finishedWithExitCode:(int)exitCode {
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self.delegate jasmine:self runFinishedWithExitCode:exitCode];
+    });
+}
+
+- (void)streamingExecution:(nonnull StreamingExecution *)sender
+            readOutputLine:(nonnull NSData *)line {
+    // TODO how to handle decoding errors here?
+    NSString *s = [[NSString alloc] initWithData:line encoding:NSUTF8StringEncoding];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        NSLog(@"forwarding line");
+        [self.delegate jasmine:self runDidOutputLine:s];
+    });
 }
 
 @end

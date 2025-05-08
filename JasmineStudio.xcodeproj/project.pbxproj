@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AAD3EF5D2DCB0A85000480DD /* jasmineStudioReporter.js in Resources */ = {isa = PBXBuildFile; fileRef = AAD3EF5C2DCB0A85000480DD /* jasmineStudioReporter.js */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		AA3E5A782DBD615F00CD51E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,6 +23,7 @@
 /* Begin PBXFileReference section */
 		AA3E5A622DBD615E00CD51E6 /* JasmineStudio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasmineStudio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA3E5A772DBD615F00CD51E6 /* JasmineStudioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasmineStudioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD3EF5C2DCB0A85000480DD /* jasmineStudioReporter.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = jasmineStudioReporter.js; path = reporter/jasmineStudioReporter.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -55,6 +60,7 @@
 		AA3E5A592DBD615E00CD51E6 = {
 			isa = PBXGroup;
 			children = (
+				AAD3EF5C2DCB0A85000480DD /* jasmineStudioReporter.js */,
 				AA3E5A642DBD615E00CD51E6 /* JasmineStudio */,
 				AA3E5A7A2DBD615F00CD51E6 /* JasmineStudioTests */,
 				AA3E5A632DBD615E00CD51E6 /* Products */,
@@ -161,6 +167,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAD3EF5D2DCB0A85000480DD /* jasmineStudioReporter.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

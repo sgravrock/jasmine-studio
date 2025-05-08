@@ -20,4 +20,14 @@ completionHandler:(ExternalCommandCompletionHandler)completionHandler {
     self.lastCompletionHandler = completionHandler;
 }
 
+- (void)stream:(NSString *)executablePath
+      withArgs:(NSArray<NSString *> *)args
+          path:(NSString *)path
+   workingDirectory:(NSString *)cwd
+      delegate:(id<StreamingExecutionDelegate>)delegate {
+    self.lastExecutablePath = executablePath;
+    self.lastArgs = args;
+    self.lastCwd = cwd;
+    self.lastDelegate = delegate;
+}
 @end

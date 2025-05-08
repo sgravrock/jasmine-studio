@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray<NSString *> *lastArgs;
 @property (nonatomic, strong) NSString *lastCwd;
 @property (nonatomic, strong) ExternalCommandCompletionHandler lastCompletionHandler;
+@property (nonatomic, strong) id<StreamingExecutionDelegate> lastDelegate;
 
 @end
 

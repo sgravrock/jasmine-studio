@@ -164,3 +164,25 @@ A reasonable design might look like:
   delegate for the outline view
 * Detail view controller that shows results/output for the selected spec
 
+## Reporting and interprocess communication
+
+The msot straightforward way to transmit results from Jasmine to Jasmine Studio
+would be to accumulate them into an object and JSON serialize it at the end. But
+that design wouldn't achieve two important goals. Jasmine Studio should show the
+result of each spec as soon as it's available and asssociate console.log and 
+console.error output with the spec that was running at the time. Showing results
+as they occur means soem kind of streaming protocol. And to associate log output
+with events, they need to be temporally ordered.
+
+One way to do that is to interleave reporter events and console output in a way
+that allows them to be easily distinguished frome each other. The TeamCity 
+protocol used by IntelliJ test runner plugins does this: An event is serialized
+as a single line with a recognizable prefix. Any line that doesn't begin with
+that prefix is log output. Actually adopting the TeamCity protocol wholesale
+probably doesn't make sense because it's under-documented and can't fully 
+represent Jasmine reporter events, but doing something similar makese sense.
+
+That would break if a spec or the code under test wrote an output line starting 
+with the maagic reporter event prefix or wrote an incomplete line using e.g.
+process.stdout.write. Those scenarios seem like they'd be very uncommon, and
+IntelliJ's track record seems to bear that out.

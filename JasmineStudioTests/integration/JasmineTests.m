@@ -10,11 +10,23 @@
 #import "MockExternalCommandRunner.h"
 #import "StubSuiteNode.h"
 #import "ProjectConfig.h"
+#import "ReadableExpectation.h"
 
-@interface JasmineTests : XCTestCase
+@interface JasmineTests : XCTestCase<JasmineDelegate>
+@property (nonatomic, strong) ReadableExpectation *finishedWithExitCodeExpectation;
+@property (nonatomic, strong) NSError *receivedError;
+@property (nonatomic, assign) int receivedExitCode;
+@property (nonatomic, strong) NSMutableArray *receivedLines;
 @end
 
 @implementation JasmineTests
+
+- (void)setUp {
+    self.finishedWithExitCodeExpectation = [[ReadableExpectation alloc] initWithDescription:@"finishedWithExitCode called"];
+    self.receivedError = nil;
+    self.receivedExitCode = 0;
+    self.receivedLines = [NSMutableArray array];
+}
 
 - (void)testEnumerateWithCallback {
     MockExternalCommandRunner *cmdRunner = [[MockExternalCommandRunner alloc] init];
@@ -32,7 +44,6 @@
         receivedError = error;
     }];
     
-    XCTAssertFalse(callbackCalled);
     XCTAssertEqualObjects(cmdRunner.lastExecutablePath, @"myNodePath");
     XCTAssertEqualObjects(cmdRunner.lastCwd, @"myBaseDir");
     NSArray *expectedArgs = @[@"myBaseDir/node_modules/.bin/jasmine", @"enumerate"];
@@ -47,42 +58,51 @@
     XCTAssertEqualObjects(receivedResult[0].name, @"foo");
 }
 
-- (void)testRunNodeWithCallback {
+- (void)testRunNode {
     MockExternalCommandRunner *cmdRunner = [[MockExternalCommandRunner alloc] init];
     ProjectConfig *config = [[ProjectConfig alloc] initWithPath:@"myPath"
                                                        nodePath:@"myNodePath"
                                                  projectBaseDir:@"myBaseDir"];
     Jasmine *subject = [[Jasmine alloc] initWithConfig:config
                                          commandRunner:cmdRunner];
+    subject.delegate = self;
     SuiteNode *node = [[StubSuiteNode alloc] initWithType:SuiteNodeTypeSpec
                                                      path:@[@"foo", @"bar", @"baz"]];
-    __block BOOL callbackCalled = NO;
-    __block BOOL receivedPassed = NO;
-    __block NSString * receivedOutput = nil;
-    __block NSError *receivedError = nil;
-    [subject runNode:node withCallback:^(BOOL passed, NSString * _Nullable output, NSError * _Nullable error) {
-        callbackCalled = YES;
-        receivedPassed = passed;
-        receivedOutput = output;
-        receivedError = error;
-    }];
+
+    [subject runNode:node];
     
-    XCTAssertFalse(callbackCalled);
+    XCTAssertFalse(self.finishedWithExitCodeExpectation.isFulfilled);
     XCTAssertEqualObjects(cmdRunner.lastExecutablePath, @"myNodePath");
     XCTAssertEqualObjects(cmdRunner.lastCwd, @"myBaseDir");
-    NSArray *expectedArgs = @[
-        @"myBaseDir/node_modules/.bin/jasmine",
-        @"--filter-path=[\"foo\",\"bar\",\"baz\"]"
-    ];
-    XCTAssertEqualObjects(cmdRunner.lastArgs, expectedArgs);
-
-    // For now, output is just passed through
-    cmdRunner.lastCompletionHandler(0, [@"hello" dataUsingEncoding:NSUTF8StringEncoding], nil);
+    XCTAssertNotNil(cmdRunner.lastDelegate);
     
-    XCTAssertTrue(callbackCalled);
-    XCTAssertTrue(receivedPassed);
-    XCTAssertNil(receivedError);
-    XCTAssertEqualObjects(receivedOutput, @"hello");
+    // For now, output is just passed through
+    [cmdRunner.lastDelegate streamingExecution:nil
+                                readOutputLine:[@"hello\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [cmdRunner.lastDelegate streamingExecution:nil
+                                readOutputLine:[@"world\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [cmdRunner.lastDelegate streamingExecution:nil finishedWithExitCode:0];
+    
+    [self waitForExpectations:@[self.finishedWithExitCodeExpectation] timeout:1];
+    XCTAssertEqual(self.receivedExitCode, 0);
+    XCTAssertNil(self.receivedError);
+    NSArray *expectedLines = @[@"hello\n", @"world\n"];
+    XCTAssertEqualObjects(self.receivedLines, expectedLines);
+}
+
+#pragma mark - JasmineDelegate
+
+- (void)jasmine:(nonnull Jasmine *)sender runDidOutputLine:(nonnull NSString *)line { 
+    [self.receivedLines addObject:line];
+}
+
+- (void)jasmine:(nonnull Jasmine *)sender runFailedWithError:(nonnull NSError *)error { 
+    self.receivedError = error;
+}
+
+- (void)jasmine:(nonnull Jasmine *)sender runFinishedWithExitCode:(int)exitCode { 
+    self.receivedExitCode = exitCode;
+    [self.finishedWithExitCodeExpectation fulfill];
 }
 
 @end

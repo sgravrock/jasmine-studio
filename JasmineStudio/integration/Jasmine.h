@@ -7,29 +7,35 @@
 
 #import <Foundation/Foundation.h>
 #import "SuiteNode.h"
+#import "StreamingExecution.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class ProjectConfig;
 @class ExternalCommandRunner;
+@class Jasmine;
 
+
+// TODO: fold into delegate?
 typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSError  * _Nullable error);
-// RunCallback params will be one of three combinations:
-// * passed:NO, output:nil, error:non-nil if there was an error starting Jasmine or reading output
-// * passed:NO, output:non-nil, error:nil if Jasmine ran but failed
-// * passed:YES, output:non-nil, error:nil if the run succeeded
-// TODO: richer result than just raw output
-typedef void (^RunCallback)(BOOL passed, NSString * _Nullable output, NSError * _Nullable error);
+
+@protocol JasmineDelegate
+- (void)jasmine:(Jasmine *)sender runFailedWithError:(NSError *)error;
+// TODO: richer output than just raw text
+- (void)jasmine:(Jasmine *)sender runDidOutputLine:(NSString *)line;
+- (void)jasmine:(Jasmine *)sender runFinishedWithExitCode:(int)exitCode;
+@end
 
 
-@interface Jasmine : NSObject
+@interface Jasmine : NSObject<StreamingExecutionDelegate>
 
 @property (nonatomic, readonly, strong) ProjectConfig *config;
+@property (nonatomic, weak) id<JasmineDelegate> delegate;
 
 - (instancetype)initWithConfig:(ProjectConfig *)config
                  commandRunner:(ExternalCommandRunner *)commandRunner;
 - (void)enumerateWithCallback:(EnumerationCallback)callback;
-- (void)runNode:(SuiteNode *)node withCallback:(RunCallback)callback;
+- (void)runNode:(SuiteNode *)node;
 
 @end
 

@@ -11,7 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OutputViewController : NSViewController
 
-- (void)showOutput:(NSString *)output;
+- (void)clearOutput;
+- (void)appendOutput:(NSString *)output;
 
 @end
 

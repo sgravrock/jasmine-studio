@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RunnerViewController : NSSplitViewController<SuiteTreeViewControllerDelegate>
+@interface RunnerViewController : NSSplitViewController<SuiteTreeViewControllerDelegate, JasmineDelegate>
 
 @property (nonatomic, strong) Jasmine *jasmine;
 - (void)loadSuite;

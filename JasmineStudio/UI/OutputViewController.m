@@ -13,8 +13,12 @@
 
 @implementation OutputViewController
 
-- (void)showOutput:(NSString *)output {
-    self.outputTextView.string = output;
+- (void)clearOutput {
+    self.outputTextView.string = @"";
+}
+
+- (void)appendOutput:(NSString *)output {
+    self.outputTextView.string = [self.outputTextView.string stringByAppendingString:output];
 }
 
 @end

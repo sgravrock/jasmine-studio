@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "StreamingExecution.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,12 +17,18 @@ typedef void (^ExternalCommandCompletionHandler)(int exitCode,  NSData * _Nullab
 
 @interface ExternalCommandRunner : NSObject
 
+// TODO: Make this all delegate-based?
 - (void)run:(NSString *)executablePath
    withArgs:(NSArray<NSString *> *)args
        path:(NSString *)path
 workingDirectory:(NSString *)cwd
 completionHandler:(ExternalCommandCompletionHandler)completionHandler;
 
+- (void)stream:(NSString *)executablePath
+      withArgs:(NSArray<NSString *> *)args
+          path:(NSString *)path
+   workingDirectory:(NSString *)cwd
+      delegate:(id<StreamingExecutionDelegate>)delegate;
 @end
 
 NS_ASSUME_NONNULL_END
