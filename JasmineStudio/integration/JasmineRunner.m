@@ -5,15 +5,15 @@
 //  Created by Stephen Gravrock on 4/21/25.
 //
 
-#import "Jasmine.h"
+#import "JasmineRunner.h"
 #import "ExternalCommandRunner.h"
 #import "ProjectConfig.h"
 
-@interface Jasmine()
+@interface JasmineRunner()
 @property (nonatomic, strong) ExternalCommandRunner *cmdRunner;
 @end
 
-@implementation Jasmine
+@implementation JasmineRunner
 
 - (instancetype)initWithConfig:(ProjectConfig *)config commandRunner:(ExternalCommandRunner *)commandRunner {
     self = [super init];
@@ -83,14 +83,14 @@
 - (void)streamingExecution:(nonnull StreamingExecution *)sender
          finishedWithError:(nonnull NSError *)error {
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [self.delegate jasmine:self runFailedWithError:error];
+        [self.delegate jasmineRunner:self runFailedWithError:error];
     });
 }
 
 - (void)streamingExecution:(nonnull StreamingExecution *)sender
       finishedWithExitCode:(int)exitCode {
     dispatch_async(dispatch_get_main_queue(), ^(){
-        [self.delegate jasmine:self runFinishedWithExitCode:exitCode];
+        [self.delegate jasmineRunner:self runFinishedWithExitCode:exitCode];
     });
 }
 
@@ -100,7 +100,7 @@
     NSString *s = [[NSString alloc] initWithData:line encoding:NSUTF8StringEncoding];
     dispatch_async(dispatch_get_main_queue(), ^(){
         NSLog(@"forwarding line");
-        [self.delegate jasmine:self runDidOutputLine:s];
+        [self.delegate jasmineRunner:self runDidOutputLine:s];
     });
 }
 

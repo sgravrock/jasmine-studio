@@ -15,9 +15,9 @@
 
 @implementation RunnerViewController
 
-- (void)setJasmine:(Jasmine *)jasmine {
+- (void)setJasmineRunner:(JasmineRunner *)jasmine {
     jasmine.delegate = self;
-    _jasmine = jasmine;
+    _jasmineRunner = jasmine;
 }
 
 - (void)viewDidLoad {
@@ -31,7 +31,7 @@
 - (void)loadSuite {
     // TODO: show some kind of loading indicator
     __weak RunnerViewController *weakSelf = self;
-    [self.jasmine enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
+    [self.jasmineRunner enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
         if (error != nil) {
             // TODO
             NSLog(@"Enumeration failed: %@", [error localizedDescription]);
@@ -46,21 +46,21 @@
                         runNode:(nonnull SuiteNode *)node {
     // TODO: show some kind of loading indicator
     [self.outputViewController clearOutput];
-    [self.jasmine runNode:node];
+    [self.jasmineRunner runNode:node];
 }
 
 
-- (void)jasmine:(nonnull Jasmine *)sender runDidOutputLine:(nonnull NSString *)line { 
+- (void)jasmineRunner:(nonnull JasmineRunner *)sender runDidOutputLine:(nonnull NSString *)line { 
     [self.outputViewController appendOutput:line];
 }
 
-- (void)jasmine:(nonnull Jasmine *)sender runFailedWithError:(nonnull NSError *)error {
+- (void)jasmineRunner:(nonnull JasmineRunner *)sender runFailedWithError:(nonnull NSError *)error {
     // TODO
     NSString *msg = [NSString stringWithFormat:@"Run errored: %@", [error localizedDescription]];
     [self.outputViewController appendOutput:msg];
 }
 
-- (void)jasmine:(nonnull Jasmine *)sender runFinishedWithExitCode:(int)exitCode { 
+- (void)jasmineRunner:(nonnull JasmineRunner *)sender runFinishedWithExitCode:(int)exitCode { 
     // TODO: better overall result reporting
     if (exitCode == 0) {
         [self.outputViewController appendOutput:@"Run passed"];

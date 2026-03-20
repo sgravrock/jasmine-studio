@@ -13,24 +13,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ProjectConfig;
 @class ExternalCommandRunner;
-@class Jasmine;
+@class JasmineRunner;
 
 
 // TODO: fold into delegate?
 typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSError  * _Nullable error);
 
-@protocol JasmineDelegate
-- (void)jasmine:(Jasmine *)sender runFailedWithError:(NSError *)error;
+@protocol JasmineRunnerDelegate
+- (void)jasmineRunner:(JasmineRunner *)sender runFailedWithError:(NSError *)error;
 // TODO: richer output than just raw text
-- (void)jasmine:(Jasmine *)sender runDidOutputLine:(NSString *)line;
-- (void)jasmine:(Jasmine *)sender runFinishedWithExitCode:(int)exitCode;
+- (void)jasmineRunner:(JasmineRunner *)sender runDidOutputLine:(NSString *)line;
+- (void)jasmineRunner:(JasmineRunner *)sender runFinishedWithExitCode:(int)exitCode;
 @end
 
 
-@interface Jasmine : NSObject<StreamingExecutionDelegate>
+@interface JasmineRunner : NSObject<StreamingExecutionDelegate>
 
 @property (nonatomic, readonly, strong) ProjectConfig *config;
-@property (nonatomic, weak) id<JasmineDelegate> delegate;
+@property (nonatomic, weak) id<JasmineRunnerDelegate> delegate;
 
 - (instancetype)initWithConfig:(ProjectConfig *)config
                  commandRunner:(ExternalCommandRunner *)commandRunner;

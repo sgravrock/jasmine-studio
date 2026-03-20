@@ -1,25 +1,25 @@
 //
-//  JasmineTests.m
+//  JasmineRunnerTests.m
 //  JasmineStudioTests
 //
 //  Created by Stephen Gravrock on 4/29/25.
 //
 
 #import <XCTest/XCTest.h>
-#import "Jasmine.h"
+#import "JasmineRunner.h"
 #import "MockExternalCommandRunner.h"
 #import "StubSuiteNode.h"
 #import "ProjectConfig.h"
 #import "ReadableExpectation.h"
 
-@interface JasmineTests : XCTestCase<JasmineDelegate>
+@interface JasmineRunnerTests : XCTestCase<JasmineRunnerDelegate>
 @property (nonatomic, strong) ReadableExpectation *finishedWithExitCodeExpectation;
 @property (nonatomic, strong) NSError *receivedError;
 @property (nonatomic, assign) int receivedExitCode;
 @property (nonatomic, strong) NSMutableArray *receivedLines;
 @end
 
-@implementation JasmineTests
+@implementation JasmineRunnerTests
 
 - (void)setUp {
     self.finishedWithExitCodeExpectation = [[ReadableExpectation alloc] initWithDescription:@"finishedWithExitCode called"];
@@ -33,7 +33,7 @@
     ProjectConfig *config = [[ProjectConfig alloc] initWithPath:@"myPath"
                                                        nodePath:@"myNodePath"
                                                  projectBaseDir:@"myBaseDir"];
-    Jasmine *subject = [[Jasmine alloc] initWithConfig:config
+    JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                          commandRunner:cmdRunner];
     __block BOOL callbackCalled = NO;
     __block NSArray<SuiteNode *> *receivedResult = nil;
@@ -63,7 +63,7 @@
     ProjectConfig *config = [[ProjectConfig alloc] initWithPath:@"myPath"
                                                        nodePath:@"myNodePath"
                                                  projectBaseDir:@"myBaseDir"];
-    Jasmine *subject = [[Jasmine alloc] initWithConfig:config
+    JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                          commandRunner:cmdRunner];
     subject.delegate = self;
     SuiteNode *node = [[StubSuiteNode alloc] initWithType:SuiteNodeTypeSpec
@@ -92,15 +92,15 @@
 
 #pragma mark - JasmineDelegate
 
-- (void)jasmine:(nonnull Jasmine *)sender runDidOutputLine:(nonnull NSString *)line { 
+- (void)jasmineRunner:(nonnull JasmineRunner *)sender runDidOutputLine:(nonnull NSString *)line { 
     [self.receivedLines addObject:line];
 }
 
-- (void)jasmine:(nonnull Jasmine *)sender runFailedWithError:(nonnull NSError *)error { 
+- (void)jasmineRunner:(nonnull JasmineRunner *)sender runFailedWithError:(nonnull NSError *)error { 
     self.receivedError = error;
 }
 
-- (void)jasmine:(nonnull Jasmine *)sender runFinishedWithExitCode:(int)exitCode { 
+- (void)jasmineRunner:(nonnull JasmineRunner *)sender runFinishedWithExitCode:(int)exitCode { 
     self.receivedExitCode = exitCode;
     [self.finishedWithExitCodeExpectation fulfill];
 }

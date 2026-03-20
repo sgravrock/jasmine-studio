@@ -8,7 +8,7 @@
 #import "AppDelegate.h"
 #import "ProjectSetupViewController.h"
 #import "RunnerViewController.h"
-#import "Jasmine.h"
+#import "JasmineRunner.h"
 #import "ExternalCommandRunner.h"
 
 @implementation AppDelegate
@@ -27,7 +27,7 @@
         [setupWindowController.window close];
         NSWindowController *runnerWindowController = [sb instantiateControllerWithIdentifier:@"runnerWindowController"];
         RunnerViewController *runnerViewController = (RunnerViewController *)runnerWindowController.window.contentViewController;
-        runnerViewController.jasmine = [[Jasmine alloc] initWithConfig:config commandRunner:[[ExternalCommandRunner alloc] init]];
+        runnerViewController.jasmineRunner = [[JasmineRunner alloc] initWithConfig:config commandRunner:[[ExternalCommandRunner alloc] init]];
         [runnerViewController loadSuite];
         [runnerWindowController.window makeKeyAndOrderFront:self];
     };

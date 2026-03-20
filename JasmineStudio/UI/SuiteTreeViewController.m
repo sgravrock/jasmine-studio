@@ -6,7 +6,7 @@
 //
 
 #import "SuiteTreeViewController.h"
-#import "Jasmine.h"
+#import "JasmineRunner.h"
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet OutlineViewWithContextMenu *outlineView;
