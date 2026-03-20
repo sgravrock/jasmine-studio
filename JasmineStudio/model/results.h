@@ -30,7 +30,7 @@ typedef enum {
 
 
 // https://jasmine.github.io/api/5.7/global.html#ExpectationResult
-// expected and actual are omitted because they're unreliable and deprecateed. passed is omitted because in this context it's always false.
+// expected and actual are omitted because they're unreliable and deprecated in 5.x and removed in 6.0. passed is omitted because in this context it's always false.
 @interface FailedExpectation: NSObject
 @property (nonatomic, readonly, strong) NSString *matcherName;
 @property (nonatomic, readonly, strong) NSString *message;

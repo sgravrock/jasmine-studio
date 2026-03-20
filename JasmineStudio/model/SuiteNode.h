@@ -15,11 +15,14 @@ typedef enum {
 } SuiteNodeType;
 
 
+// Represents a suite or spec, as determined by the type property.
 @interface SuiteNode: NSObject
 
 @property (nonatomic, readonly, assign) SuiteNodeType type;
 @property (nonatomic, readonly, strong) NSString *name;
 @property (nonatomic, weak) SuiteNode * _Nullable parent;
+// Children of a suite. If the SuiteNode represents a spec, children should
+// be empty, although this is not enforced.
 @property (nonatomic, readonly, strong) NSMutableArray<SuiteNode *> *children;
 
 - (instancetype)init NS_UNAVAILABLE;
