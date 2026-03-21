@@ -7,6 +7,7 @@
 
 #import "JasmineRunner.h"
 #import "ExternalCommandRunner.h"
+#import "EnumerationTreeBuilder.h"
 #import "ProjectConfig.h"
 
 @interface JasmineRunner()
@@ -40,7 +41,8 @@
             // esp. when using too old a jasmine version.
             NSLog(@"oh no: %@", [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding]);
         } else {
-            NSArray<SuiteNode *> *roots = suiteNodesFromJson(output, &error);
+            EnumerationTreeBuilder *tb = [[EnumerationTreeBuilder alloc] init];
+            NSArray<SuiteNode *> *roots = [tb fromJsonData:output error:&error];
             callback(roots, error);
         }
     }];

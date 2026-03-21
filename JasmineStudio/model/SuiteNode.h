@@ -32,6 +32,4 @@ typedef enum {
 
 @end
 
-NSArray<SuiteNode *> *suiteNodesFromJson(NSData *jsonData, NSError **error);
-
 NS_ASSUME_NONNULL_END
