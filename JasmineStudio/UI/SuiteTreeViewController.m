@@ -10,12 +10,12 @@
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet OutlineViewWithContextMenu *outlineView;
-@property (nonatomic, strong) NSArray<SuiteNode *> *roots;
+@property (nonatomic, strong) NSArray<SuiteOrSpec *> *roots;
 @end
 
 @implementation SuiteTreeViewController
 
-- (void)show:(NSArray<SuiteNode *> *)roots {
+- (void)show:(NSArray<SuiteOrSpec *> *)roots {
     self.roots = roots;
     [self.outlineView reloadData];
 }
@@ -30,7 +30,7 @@
     if (item == nil) {
         return self.roots.count;
     } else {
-        return ((SuiteNode *)item).children.count;
+        return ((SuiteOrSpec *)item).children.count;
     }
 }
 
@@ -38,12 +38,12 @@
     if (item == nil) {
         return self.roots[index];
     } else {
-        return ((SuiteNode *)item).children[index];
+        return ((SuiteOrSpec *)item).children[index];
     }
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-    return ((SuiteNode *)item).children.count > 0;
+    return ((SuiteOrSpec *)item).children.count > 0;
 }
 
 // Needed for data binding
@@ -64,13 +64,13 @@
 }
 
 - (void)handleRunMenuItem:(id)sender {
-    SuiteNode *target = ((NSMenuItem *)sender).representedObject;
+    SuiteOrSpec *target = ((NSMenuItem *)sender).representedObject;
     [self.delegate suiteTreeViewController:self runNode:target];
 }
 
 #pragma mark TeeReconcilerDelegate
 
-- (void)treeReconciler:(nonnull TreeReconciler *)sender didUpdateNode:(nonnull SuiteNode *)node {
+- (void)treeReconciler:(nonnull TreeReconciler *)sender didUpdateNode:(nonnull SuiteOrSpec *)node {
     // TODO: only reload children if child nodes were added/removed
     [self.outlineView reloadItem:node reloadChildren:YES];
 }

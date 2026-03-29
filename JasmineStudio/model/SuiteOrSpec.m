@@ -5,18 +5,18 @@
 //  Created by Stephen Gravrock on 4/21/25.
 //
 
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
-@implementation SuiteNode
+@implementation SuiteOrSpec
 
-- (instancetype)initWithType:(SuiteNodeType)type name:(NSString *)name {
+- (instancetype)initWithType:(SuiteOrSpecType)type name:(NSString *)name {
     self = [super init];
     
     if (self) {
         _type = type;
         _name = name;
         _children = [NSMutableArray array];
-        _status = SuiteNodeStatusNotStarted;
+        _status = SuiteOrSpecStatusNotStarted;
     }
     
     return self;

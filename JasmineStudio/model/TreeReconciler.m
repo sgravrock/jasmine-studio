@@ -6,15 +6,15 @@
 //
 
 #import "TreeReconciler.h"
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
 @interface TreeReconciler()
-@property (nonatomic, strong) NSMutableSet<SuiteNode *> *seen;
+@property (nonatomic, strong) NSMutableSet<SuiteOrSpec *> *seen;
 @end
 
 @implementation TreeReconciler
 
-- (instancetype)initWithRoots:(NSMutableArray<SuiteNode *> *)roots {
+- (instancetype)initWithRoots:(NSMutableArray<SuiteOrSpec *> *)roots {
     self = [super init];
     
     if (self) {
@@ -28,14 +28,14 @@
 // TODO: Switching to a single tree (i.e. synthetic top suite) instead of an
 // array of trees would make this a lot cleaner.
 
-- (void)applyChange:(SuiteNode *)changedNode {
+- (void)applyChange:(SuiteOrSpec *)changedNode {
     if (changedNode.parent == nil) {
         [self applyRootChange:changedNode];
         return;
     }
     
-    SuiteNode *parent = [self existingNodeMatching:changedNode.parent];
-    SuiteNode *match = [self existingNodeMatching:changedNode in:parent.children];
+    SuiteOrSpec *parent = [self existingNodeMatching:changedNode.parent];
+    SuiteOrSpec *match = [self existingNodeMatching:changedNode in:parent.children];
     
     if (match == nil) {
         // A newly discovered node
@@ -48,8 +48,8 @@
     }
 }
 
-- (void)applyRootChange:(SuiteNode *)changedNode {
-    SuiteNode *match = [self existingNodeMatching:changedNode in:self.roots];
+- (void)applyRootChange:(SuiteOrSpec *)changedNode {
+    SuiteOrSpec *match = [self existingNodeMatching:changedNode in:self.roots];
     
     if (match == nil) {
         // A newly discovered node
@@ -66,7 +66,7 @@
     NSArray *rootsToRemove = [self unseenNodesIn:self.roots];
     
     if (rootsToRemove.count > 0) {
-        for (SuiteNode *n in rootsToRemove) {
+        for (SuiteOrSpec *n in rootsToRemove) {
             [self.roots removeObjectIdenticalTo:n];
         }
         
@@ -74,7 +74,7 @@
     }
     
     // Scan the remaining roots and remove unseen nodes
-    for (SuiteNode *n in self.roots) {
+    for (SuiteOrSpec *n in self.roots) {
         [self removeUnseenDescendantsOf:n];
     }
     
@@ -82,26 +82,26 @@
     [self.seen removeAllObjects];
 }
 
-- (void)removeUnseenDescendantsOf:(SuiteNode *)ancestor {
+- (void)removeUnseenDescendantsOf:(SuiteOrSpec *)ancestor {
     NSArray *childrenToRemove = [self unseenNodesIn:ancestor.children];
     
     if (childrenToRemove.count > 0) {
-        for (SuiteNode *n in childrenToRemove) {
+        for (SuiteOrSpec *n in childrenToRemove) {
             [ancestor.children removeObjectIdenticalTo:n];
         }
         
         [self.delegate treeReconciler:self didUpdateNode:ancestor];
     }
     
-    for (SuiteNode *child in ancestor.children) {
+    for (SuiteOrSpec *child in ancestor.children) {
         [self removeUnseenDescendantsOf:child];
     }
 }
 
-- (NSArray<SuiteNode *> *)unseenNodesIn:(NSArray<SuiteNode *> *)arr {
-    NSMutableArray<SuiteNode *> *result = [NSMutableArray array];
+- (NSArray<SuiteOrSpec *> *)unseenNodesIn:(NSArray<SuiteOrSpec *> *)arr {
+    NSMutableArray<SuiteOrSpec *> *result = [NSMutableArray array];
     
-    for (SuiteNode *n in arr) {
+    for (SuiteOrSpec *n in arr) {
         if (![self.seen containsObject:n]) {
             [result addObject:n];
         }
@@ -110,14 +110,14 @@
     return result;
 }
 
-- (void)updateExistingNode:(SuiteNode *)target from:(SuiteNode *)changedNode {
+- (void)updateExistingNode:(SuiteOrSpec *)target from:(SuiteOrSpec *)changedNode {
     target.status = changedNode.status;
     // TODO copy other result properties
     [self.delegate treeReconciler:self didUpdateNode:target];
 }
 
-- (SuiteNode * _Nullable)existingNodeMatching:(SuiteNode *)changedNode  {
-    NSMutableArray<SuiteNode *> *candidates;
+- (SuiteOrSpec * _Nullable)existingNodeMatching:(SuiteOrSpec *)changedNode  {
+    NSMutableArray<SuiteOrSpec *> *candidates;
     
     if (changedNode.parent == nil) {
         candidates = self.roots;
@@ -128,8 +128,8 @@
     return [self existingNodeMatching:changedNode in:candidates];
 }
 
-- (SuiteNode * _Nullable)existingNodeMatching:(SuiteNode *)changedNode in:(NSArray<SuiteNode *> *)candidates {
-    for (SuiteNode *c in candidates) {
+- (SuiteOrSpec * _Nullable)existingNodeMatching:(SuiteOrSpec *)changedNode in:(NSArray<SuiteOrSpec *> *)candidates {
+    for (SuiteOrSpec *c in candidates) {
         if ([c.name isEqualToString:changedNode.name]) {
             return c;
         }

@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 #import "StreamingExecution.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 // This is not included in the delegate because enumeration is a separate
 // operation from test running that has a different consumer. And it only yields
 // a single completion event, making a completion callback a natural fit.
-typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSError  * _Nullable error);
+typedef void (^EnumerationCallback)(NSArray<SuiteOrSpec *> * _Nullable result, NSError  * _Nullable error);
 
 @protocol JasmineRunnerDelegate
 - (void)jasmineRunner:(JasmineRunner *)sender runFailedWithError:(NSError *)error;
@@ -41,7 +41,7 @@ typedef void (^EnumerationCallback)(NSArray<SuiteNode *> * _Nullable result, NSE
 - (instancetype)initWithConfig:(ProjectConfig *)config
                  commandRunner:(ExternalCommandRunner *)commandRunner;
 - (void)enumerateWithCallback:(EnumerationCallback)callback;
-- (void)runNode:(SuiteNode *)node;
+- (void)runNode:(SuiteOrSpec *)node;
 
 @end
 

@@ -37,9 +37,9 @@
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                          commandRunner:cmdRunner];
     __block BOOL callbackCalled = NO;
-    __block NSArray<SuiteNode *> *receivedResult = nil;
+    __block NSArray<SuiteOrSpec *> *receivedResult = nil;
     __block NSError *receivedError = nil;
-    [subject enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
+    [subject enumerateWithCallback:^(NSArray<SuiteOrSpec *> * _Nullable result, NSError * _Nullable error) {
         callbackCalled = YES;
         receivedResult = result;
         receivedError = error;
@@ -55,7 +55,7 @@
     XCTAssertTrue(callbackCalled);
     XCTAssertNil(receivedError);
     XCTAssertEqual(receivedResult.count, 1);
-    XCTAssertEqual(receivedResult[0].type, SuiteNodeTypeSpec);
+    XCTAssertEqual(receivedResult[0].type, SuiteOrSpecTypeSpec);
     XCTAssertEqualObjects(receivedResult[0].name, @"foo");
 }
 
@@ -67,7 +67,7 @@
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                                      commandRunner:cmdRunner];
     subject.delegate = self;
-    SuiteNode *node = [[StubSuiteNode alloc] initWithType:SuiteNodeTypeSpec
+    SuiteOrSpec *node = [[StubSuiteNode alloc] initWithType:SuiteOrSpecTypeSpec
                                                      path:@[@"foo", @"bar", @"baz"]];
     
     [subject runNode:node];

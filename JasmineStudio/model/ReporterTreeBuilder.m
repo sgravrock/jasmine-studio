@@ -7,11 +7,11 @@
 
 #import "ReporterTreeBuilder.h"
 #import "ReporterEvent.h"
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
 @interface ReporterTreeBuilder()
-@property (nonatomic, strong) SuiteNode * _Nullable currentSpec;
-@property (nonatomic, strong) NSMutableArray<SuiteNode *> *currentSuites;
+@property (nonatomic, strong) SuiteOrSpec * _Nullable currentSpec;
+@property (nonatomic, strong) NSMutableArray<SuiteOrSpec *> *currentSuites;
 @end
 
 @implementation ReporterTreeBuilder
@@ -35,14 +35,14 @@
 
     if ([event.eventName isEqualToString:@"specStarted"]) {
         // TODO validate name
-        SuiteNode *node = [[SuiteNode alloc] initWithType:SuiteNodeTypeSpec
-                                                     name:name];
-        node.status = SuiteNodeStatusRunning;
+        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSpec
+                                                         name:name];
+        node.status = SuiteOrSpecStatusRunning;
         node.parent = [self.currentSuites lastObject];
         self.currentSpec = node;
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"specDone"]) {
-        SuiteNode *node = self.currentSpec;
+        SuiteOrSpec *node = self.currentSpec;
         self.currentSpec = nil;
         
         node.status = [self statusFromPayload:event.payload error:error];
@@ -53,14 +53,14 @@
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"suiteStarted"]) {
         // TODO validate name
-        SuiteNode *node = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                     name:name];
-        node.status = SuiteNodeStatusRunning;
+        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                         name:name];
+        node.status = SuiteOrSpecStatusRunning;
         node.parent = [self.currentSuites lastObject];
         [self.currentSuites addObject:node];
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"suiteDone"]) {
-        SuiteNode *node = [self.currentSuites lastObject];
+        SuiteOrSpec *node = [self.currentSuites lastObject];
         [self.currentSuites removeLastObject];
         
         node.status = [self statusFromPayload:event.payload error:error];
@@ -74,25 +74,25 @@
     return YES;
 }
 
-- (SuiteNodeStatus)statusFromPayload:(NSDictionary *)payload error:(NSError **)error {
+- (SuiteOrSpecStatus)statusFromPayload:(NSDictionary *)payload error:(NSError **)error {
     NSString *status = payload[@"status"];
     
     if (status == nil) {
         *error = [[NSError alloc] initWithDomain:@"JasmineStudio" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Missing status field in event payload"}];
-        return SuiteNodeStatusFailed;
+        return SuiteOrSpecStatusFailed;
     }
     
     if ([status isEqualToString:@"passed"]) {
-        return SuiteNodeStatusPassed;
+        return SuiteOrSpecStatusPassed;
     } else if ([status isEqualToString:@"failed"]) {
-        return SuiteNodeStatusFailed;
+        return SuiteOrSpecStatusFailed;
     } else if ([status isEqualToString:@"pending"]) {
-        return SuiteNodeStatusPending;
+        return SuiteOrSpecStatusPending;
     } else if ([status isEqualToString:@"excluded"]) {
-        return SuiteNodeStatusExcluded;
+        return SuiteOrSpecStatusExcluded;
     } else {
         *error = [[NSError alloc] initWithDomain:@"JasmineStudio" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Invalid status field in event payload"}];
-        return SuiteNodeStatusFailed;
+        return SuiteOrSpecStatusFailed;
     }
 }
 

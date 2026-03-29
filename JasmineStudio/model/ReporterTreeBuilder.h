@@ -9,14 +9,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class SuiteNode;
+@class SuiteOrSpec;
 @class ReporterEvent;
 @class ReporterTreeBuilder;
 
 @protocol ReporterTreeBuilderDelegate
 
 // TODO: a callback on handleEvent:error: might work better.
-- (void)reporterTreeBuilder:(ReporterTreeBuilder *)sender didUpdateNode:(SuiteNode *)node;
+- (void)reporterTreeBuilder:(ReporterTreeBuilder *)sender didUpdateNode:(SuiteOrSpec *)node;
 
 @end
 

@@ -9,7 +9,7 @@
 
 @implementation StubSuiteNode
 
-- (instancetype)initWithType:(SuiteNodeType)type
+- (instancetype)initWithType:(SuiteOrSpecType)type
                         path:(NSArray<NSString *> *)path {
     self = [super initWithType:type name:[path lastObject]];
     

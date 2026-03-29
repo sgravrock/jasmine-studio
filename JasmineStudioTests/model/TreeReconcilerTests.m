@@ -7,12 +7,12 @@
 
 #import <XCTest/XCTest.h>
 #import "TreeReconciler.h"
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
 @interface TreeReconcilerTests : XCTestCase<TreeReconcilerDelegate>
-@property (nonatomic, strong) NSMutableArray<SuiteNode *> *updatedNodes;
+@property (nonatomic, strong) NSMutableArray<SuiteOrSpec *> *updatedNodes;
 @property (nonatomic, assign) BOOL didAddOrRemoveRootsCalled;
-@property (nonatomic, strong) NSMutableArray<SuiteNode *> *roots;
+@property (nonatomic, strong) NSMutableArray<SuiteOrSpec *> *roots;
 @property (nonatomic, strong) TreeReconciler *subject;
 @end
 
@@ -23,22 +23,22 @@
     self.didAddOrRemoveRootsCalled = NO;
     self.roots = [NSMutableArray array];
     
-    SuiteNode *root0 = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                  name:@"root 0"];
+    SuiteOrSpec *root0 = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                      name:@"root 0"];
     [self.roots addObject:root0];
-    SuiteNode *root1 = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                  name:@"root 1"];
+    SuiteOrSpec *root1 = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                      name:@"root 1"];
     [self.roots addObject:root1];
-    SuiteNode *child0 = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                   name:@"child 0"];
+    SuiteOrSpec *child0 = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                       name:@"child 0"];
     [root0.children addObject:child0];
     child0.parent = root0;
-    SuiteNode *child1 = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                   name:@"child 1"];
+    SuiteOrSpec *child1 = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                       name:@"child 1"];
     [root0.children addObject:child1];
     child1.parent = root0;
-    SuiteNode *spec = [[SuiteNode alloc] initWithType:SuiteNodeTypeSpec
-                                                 name:@"spec"];
+    SuiteOrSpec *spec = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSpec
+                                                     name:@"spec"];
     [child0.children addObject:spec];
     spec.parent = child0;
     
@@ -47,13 +47,13 @@
 }
 
 - (void)testUpdatesNonRootNode {
-    SuiteNode *target = self.roots[0].children[1];
+    SuiteOrSpec *target = self.roots[0].children[1];
     XCTAssertEqualObjects(target.name, @"child 1");
-    SuiteNode *parentOfChanged = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                            name:@"root 0"];
-    SuiteNode *changed = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                    name:@"child 1"];
-    changed.status = SuiteNodeStatusFailed;
+    SuiteOrSpec *parentOfChanged = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                                name:@"root 0"];
+    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                        name:@"child 1"];
+    changed.status = SuiteOrSpecStatusFailed;
     changed.parent = parentOfChanged;
     [parentOfChanged.children addObject:changed];
     
@@ -61,16 +61,16 @@
     
     XCTAssertEqual(self.updatedNodes.count, 1);
     XCTAssertEqual(self.updatedNodes[0], target);
-    XCTAssertEqual(target.status, SuiteNodeStatusFailed);
+    XCTAssertEqual(target.status, SuiteOrSpecStatusFailed);
 }
 
 - (void)testHandlesNonRootAddition {
-    SuiteNode *target = self.roots[0];
+    SuiteOrSpec *target = self.roots[0];
     XCTAssertEqualObjects(target.name, @"root 0");
-    SuiteNode *parentOfChanged = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                            name:@"root 0"];
-    SuiteNode *changed = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                    name:@"child 2"];
+    SuiteOrSpec *parentOfChanged = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                                name:@"root 0"];
+    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                        name:@"child 2"];
     changed.parent = parentOfChanged;
     [parentOfChanged.children addObject:changed];
     
@@ -83,23 +83,23 @@
 }
 
 - (void)testHandlesRootChange {
-    SuiteNode *target = self.roots[0];
+    SuiteOrSpec *target = self.roots[0];
     XCTAssertEqualObjects(target.name, @"root 0");
-    SuiteNode *changed = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                    name:@"root 0"];
-    changed.status = SuiteNodeStatusExcluded;
+    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                        name:@"root 0"];
+    changed.status = SuiteOrSpecStatusExcluded;
     
     [self.subject applyChange:changed];
     
     XCTAssertEqual(self.updatedNodes.count, 1);
     XCTAssertEqual(self.updatedNodes[0], target);
-    XCTAssertEqual(target.status, SuiteNodeStatusExcluded);
+    XCTAssertEqual(target.status, SuiteOrSpecStatusExcluded);
 
 }
 
 - (void)testHandlesRootAddition {
-    SuiteNode *changed = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite
-                                                    name:@"new node"];
+    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+                                                        name:@"new node"];
     
     [self.subject applyChange:changed];
 
@@ -153,7 +153,7 @@
 
 }
 
-- (void)treeReconciler:(TreeReconciler *)sender didUpdateNode:(SuiteNode *)node {
+- (void)treeReconciler:(TreeReconciler *)sender didUpdateNode:(SuiteOrSpec *)node {
     [self.updatedNodes addObject:node];
 }
 

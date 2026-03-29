@@ -43,13 +43,13 @@
             NSLog(@"oh no: %@", [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding]);
         } else {
             EnumerationTreeBuilder *tb = [[EnumerationTreeBuilder alloc] init];
-            NSArray<SuiteNode *> *roots = [tb fromJsonData:output error:&error];
+            NSArray<SuiteOrSpec *> *roots = [tb fromJsonData:output error:&error];
             callback(roots, error);
         }
     }];
 }
 
-- (void)runNode:(SuiteNode *)node  {
+- (void)runNode:(SuiteOrSpec *)node  {
     NSError *error = nil;
     NSData *pathData = [NSJSONSerialization dataWithJSONObject:[node path]
                                                        options:0

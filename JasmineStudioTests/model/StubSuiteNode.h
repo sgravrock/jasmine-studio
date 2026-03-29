@@ -5,15 +5,15 @@
 //  Created by Stephen Gravrock on 4/29/25.
 //
 
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface StubSuiteNode : SuiteNode
+@interface StubSuiteNode : SuiteOrSpec
 
 @property (nonatomic, readonly, strong) NSArray<NSString *> *path;
 
-- (instancetype)initWithType:(SuiteNodeType)type
+- (instancetype)initWithType:(SuiteOrSpecType)type
                         path:(NSArray<NSString *> *)path;
 
 @end

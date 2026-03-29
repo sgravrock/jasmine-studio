@@ -8,10 +8,10 @@
 #import <XCTest/XCTest.h>
 #import "ReporterTreeBuilder.h"
 #import "ReporterEvent.h"
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
 @interface ReporterTreeBuilderTests : XCTestCase<ReporterTreeBuilderDelegate>
-@property (nonatomic, strong) NSMutableArray<SuiteNode *> *emittedNodes;
+@property (nonatomic, strong) NSMutableArray<SuiteOrSpec *> *emittedNodes;
 @property (nonatomic, strong) ReporterTreeBuilder *subject;
 @end
 
@@ -41,17 +41,17 @@
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 1);
-    XCTAssertEqual(self.emittedNodes[0].type, SuiteNodeTypeSpec);
+    XCTAssertEqual(self.emittedNodes[0].type, SuiteOrSpecTypeSpec);
     XCTAssertEqualObjects(self.emittedNodes[0].name, @"a spec");
     XCTAssertNil(self.emittedNodes[0].parent);
-    XCTAssertEqual(self.emittedNodes[0].status, SuiteNodeStatusRunning);
+    XCTAssertEqual(self.emittedNodes[0].status, SuiteOrSpecStatusRunning);
     
     XCTAssertTrue([self.subject handleEvent:doneEvent error:&error]);
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 2);
     XCTAssertEqual(self.emittedNodes[0], self.emittedNodes[1]); // same instance
-    XCTAssertEqual(self.emittedNodes[0].status, SuiteNodeStatusFailed);
+    XCTAssertEqual(self.emittedNodes[0].status, SuiteOrSpecStatusFailed);
     // TODO also assert other result aspects
 }
 
@@ -78,7 +78,7 @@
     XCTAssertNil(error);
 
     XCTAssertEqual(self.emittedNodes.count, 2);
-    XCTAssertEqual(self.emittedNodes[1].type, SuiteNodeTypeSpec);
+    XCTAssertEqual(self.emittedNodes[1].type, SuiteOrSpecTypeSpec);
     XCTAssertEqualObjects(self.emittedNodes[1].name, @"a spec");
     XCTAssertEqual(self.emittedNodes[1].parent, self.emittedNodes[0]);
     
@@ -143,9 +143,9 @@
 
     XCTAssertEqual(self.emittedNodes.count, 3);
     
-    for (SuiteNode *node in self.emittedNodes) {
-        XCTAssertEqual(node.type, SuiteNodeTypeSuite);
-        XCTAssertEqual(node.status, SuiteNodeStatusRunning);
+    for (SuiteOrSpec *node in self.emittedNodes) {
+        XCTAssertEqual(node.type, SuiteOrSpecTypeSuite);
+        XCTAssertEqual(node.status, SuiteOrSpecStatusRunning);
     }
         
     XCTAssertEqualObjects(self.emittedNodes[0].name, @"suite a");
@@ -162,10 +162,10 @@
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 5);
-    XCTAssertEqual(self.emittedNodes[0].status, SuiteNodeStatusRunning);
+    XCTAssertEqual(self.emittedNodes[0].status, SuiteOrSpecStatusRunning);
     
     for (int i = 1; i < self.emittedNodes.count; i++) {
-        XCTAssertEqual(self.emittedNodes[i].status, SuiteNodeStatusPassed);
+        XCTAssertEqual(self.emittedNodes[i].status, SuiteOrSpecStatusPassed);
     }
     
     // Same instances
@@ -176,14 +176,14 @@
     XCTAssertNil(error);
 
     XCTAssertEqual(self.emittedNodes.count, 6);
-    XCTAssertEqual(self.emittedNodes[5].status, SuiteNodeStatusRunning);
+    XCTAssertEqual(self.emittedNodes[5].status, SuiteOrSpecStatusRunning);
     XCTAssertEqualObjects(self.emittedNodes[5].name, @"suite d");
 
     XCTAssertTrue([self.subject handleEvent:dDoneEvent error:&error]);
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 7);
-    XCTAssertEqual(self.emittedNodes[6].status, SuiteNodeStatusPassed);
+    XCTAssertEqual(self.emittedNodes[6].status, SuiteOrSpecStatusPassed);
     XCTAssertEqual(self.emittedNodes[6], self.emittedNodes[5]);
 
 
@@ -191,11 +191,11 @@
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 8);
-    XCTAssertEqual(self.emittedNodes[7].status, SuiteNodeStatusPassed);
+    XCTAssertEqual(self.emittedNodes[7].status, SuiteOrSpecStatusPassed);
     XCTAssertEqual(self.emittedNodes[7], self.emittedNodes[0]);
 }
 
-- (void)reporterTreeBuilder:(nonnull ReporterTreeBuilder *)sender didUpdateNode:(nonnull SuiteNode *)node {
+- (void)reporterTreeBuilder:(nonnull ReporterTreeBuilder *)sender didUpdateNode:(nonnull SuiteOrSpec *)node {
     [self.emittedNodes addObject:node];
 }
 

@@ -36,7 +36,7 @@
     __weak RunnerViewController *weakSelf = self;
     
     // TODO: show some kind of loading indicator
-    [self.jasmineRunner enumerateWithCallback:^(NSArray<SuiteNode *> * _Nullable result, NSError * _Nullable error) {
+    [self.jasmineRunner enumerateWithCallback:^(NSArray<SuiteOrSpec *> * _Nullable result, NSError * _Nullable error) {
         if (error != nil) {
             // TODO
             NSLog(@"Enumeration failed: %@", [error localizedDescription]);
@@ -50,7 +50,7 @@
 }
 
 - (void)suiteTreeViewController:(nonnull SuiteTreeViewController *)sender
-                        runNode:(nonnull SuiteNode *)node {
+                        runNode:(nonnull SuiteOrSpec *)node {
     // TODO: show some kind of loading indicator
     [self.outputViewController clearOutput];
     self.treeBuilder = [[ReporterTreeBuilder alloc] init];
@@ -99,7 +99,7 @@
 
 #pragma mark - ReporterTreeBuilderDelegate methods
 
-- (void)reporterTreeBuilder:(nonnull ReporterTreeBuilder *)sender didUpdateNode:(nonnull SuiteNode *)node {
+- (void)reporterTreeBuilder:(nonnull ReporterTreeBuilder *)sender didUpdateNode:(nonnull SuiteOrSpec *)node {
     NSString *line = [NSString stringWithFormat:@"%@: %@\n",
                       [self statusAsString:node.status],
                       [node.path componentsJoinedByString:@" "]];
@@ -109,19 +109,19 @@
 
 #pragma mark -
 
-- (NSString *)statusAsString:(SuiteNodeStatus)status {
+- (NSString *)statusAsString:(SuiteOrSpecStatus)status {
     switch (status) {
-        case SuiteNodeStatusNotStarted:
+        case SuiteOrSpecStatusNotStarted:
             return @"not started";
-        case SuiteNodeStatusRunning:
+        case SuiteOrSpecStatusRunning:
             return @"running";
-        case SuiteNodeStatusPassed:
+        case SuiteOrSpecStatusPassed:
             return @"passed";
-        case SuiteNodeStatusFailed:
+        case SuiteOrSpecStatusFailed:
             return @"failed";
-        case SuiteNodeStatusPending:
+        case SuiteOrSpecStatusPending:
             return @"pending";
-        case SuiteNodeStatusExcluded:
+        case SuiteOrSpecStatusExcluded:
             return @"excluded";
         default:
             return @"unknown status";

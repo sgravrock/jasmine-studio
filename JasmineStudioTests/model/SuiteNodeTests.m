@@ -6,7 +6,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 
 @interface ModelsTests : XCTestCase
 
@@ -15,14 +15,14 @@
 @implementation ModelsTests
 
 - (void)testPathForRootNode {
-    SuiteNode *node = [[SuiteNode alloc] initWithType:SuiteNodeTypeSpec name:@"foo"];
+    SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSpec name:@"foo"];
     XCTAssertEqualObjects([node path], @[@"foo"]);
 }
 
 - (void)testPathForNonRootNode {
-    SuiteNode *target = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:@"baz"];
-    SuiteNode *parent = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:@"bar"];
-    SuiteNode *root = [[SuiteNode alloc] initWithType:SuiteNodeTypeSuite name:@"foo"];
+    SuiteOrSpec *target = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite name:@"baz"];
+    SuiteOrSpec *parent = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite name:@"bar"];
+    SuiteOrSpec *root = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite name:@"foo"];
     target.parent = parent;
     parent.parent = root;
     NSArray *expectedPath = @[@"foo", @"bar", @"baz"];

@@ -7,7 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "OutlineViewWithContextMenu.h"
-#import "SuiteNode.h"
+#import "SuiteOrSpec.h"
 #import "TreeReconciler.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -15,12 +15,12 @@ NS_ASSUME_NONNULL_BEGIN
 @class SuiteTreeViewController;
 
 @protocol SuiteTreeViewControllerDelegate
-- (void)suiteTreeViewController:(SuiteTreeViewController *)sender runNode:(SuiteNode *)node;
+- (void)suiteTreeViewController:(SuiteTreeViewController *)sender runNode:(SuiteOrSpec *)node;
 @end
 
 @interface SuiteTreeViewController : NSViewController<NSOutlineViewDataSource, NSOutlineViewDelegate, OutlineViewContextMenuDelegate, TreeReconcilerDelegate>
 @property (nonatomic, weak) id<SuiteTreeViewControllerDelegate> delegate;
-- (void)show:(NSArray<SuiteNode *> *)roots;
+- (void)show:(NSArray<SuiteOrSpec *> *)roots;
 @end
 
 NS_ASSUME_NONNULL_END
