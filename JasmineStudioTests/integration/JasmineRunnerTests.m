@@ -9,7 +9,7 @@
 #import "JasmineRunner.h"
 #import "ReporterEvent.h"
 #import "MockExternalCommandRunner.h"
-#import "StubSuiteNode.h"
+#import "TreeNode.h"
 #import "ProjectConfig.h"
 #import "ReadableExpectation.h"
 
@@ -67,8 +67,11 @@
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                                      commandRunner:cmdRunner];
     subject.delegate = self;
-    SuiteOrSpec *node = [[StubSuiteNode alloc] initWithType:TreeNodeTypeSpec
-                                                     path:@[@"foo", @"bar", @"baz"]];
+    SuiteOrSpec *grandparent = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite name:@"foo"];
+    SuiteOrSpec *parent = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite name:@"bar"];
+    parent.parent = grandparent;
+    SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec name:@"baz"];
+    node.parent = parent;
     
     [subject runNode:node];
     
