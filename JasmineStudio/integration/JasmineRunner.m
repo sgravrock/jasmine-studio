@@ -8,6 +8,7 @@
 #import "JasmineRunner.h"
 #import "ExternalCommandRunner.h"
 #import "EnumerationTreeBuilder.h"
+#import "ReporterEvent.h"
 #import "ProjectConfig.h"
 
 @interface JasmineRunner()
@@ -100,9 +101,17 @@
             readOutputLine:(nonnull NSData *)line {
     // TODO how to handle decoding errors here?
     NSString *s = [[NSString alloc] initWithData:line encoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    ReporterEvent *event = [ReporterEvent fromOutputLine:s error:&error];
+        
     dispatch_async(dispatch_get_main_queue(), ^(){
-        NSLog(@"forwarding line");
-        [self.delegate jasmineRunner:self runDidOutputLine:s];
+        if (event) {
+            [self.delegate jasmineRunner:self emittedReporterEvent:event];
+        } else {
+            // Assume that anything that didn't decode as a reporter event
+            // is output written by a test or the code under test.
+            [self.delegate jasmineRunner:self runDidOutputLine:s];
+        }
     });
 }
 

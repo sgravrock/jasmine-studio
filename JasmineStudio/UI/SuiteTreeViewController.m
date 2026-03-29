@@ -68,4 +68,15 @@
     [self.delegate suiteTreeViewController:self runNode:target];
 }
 
+#pragma mark TeeReconcilerDelegate
+
+- (void)treeReconciler:(nonnull TreeReconciler *)sender didUpdateNode:(nonnull SuiteNode *)node {
+    // TODO: only reload children if child nodes were added/removed
+    [self.outlineView reloadItem:node reloadChildren:YES];
+}
+
+- (void)treeReconcilerDidAddOrRemoveRoots:(nonnull TreeReconciler *)sender {
+    [self.outlineView reloadData];
+}
+
 @end

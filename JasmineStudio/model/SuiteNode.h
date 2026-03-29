@@ -14,6 +14,15 @@ typedef enum {
     SuiteNodeTypeSpec
 } SuiteNodeType;
 
+typedef enum {
+    SuiteNodeStatusNotStarted,
+    SuiteNodeStatusRunning,
+    SuiteNodeStatusPassed,
+    SuiteNodeStatusFailed,
+    SuiteNodeStatusPending,
+    SuiteNodeStatusExcluded
+} SuiteNodeStatus;
+
 
 // Represents a suite or spec, as determined by the type property.
 @interface SuiteNode: NSObject
@@ -24,6 +33,8 @@ typedef enum {
 // Children of a suite. If the SuiteNode represents a spec, children should
 // be empty, although this is not enforced.
 @property (nonatomic, readonly, strong) NSMutableArray<SuiteNode *> *children;
+
+@property (nonatomic, assign) SuiteNodeStatus status;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithType:(SuiteNodeType)type name:(NSString *)name;

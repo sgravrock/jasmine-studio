@@ -16,6 +16,7 @@
         _type = type;
         _name = name;
         _children = [NSMutableArray array];
+        _status = SuiteNodeStatusNotStarted;
     }
     
     return self;

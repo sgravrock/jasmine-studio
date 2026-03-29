@@ -7,6 +7,7 @@
 
 #import <XCTest/XCTest.h>
 #import "JasmineRunner.h"
+#import "ReporterEvent.h"
 #import "MockExternalCommandRunner.h"
 #import "StubSuiteNode.h"
 #import "ProjectConfig.h"
@@ -16,7 +17,7 @@
 @property (nonatomic, strong) ReadableExpectation *finishedWithExitCodeExpectation;
 @property (nonatomic, strong) NSError *receivedError;
 @property (nonatomic, assign) int receivedExitCode;
-@property (nonatomic, strong) NSMutableArray *receivedLines;
+@property (nonatomic, strong) NSMutableArray *receivedOutputs;
 @end
 
 @implementation JasmineRunnerTests
@@ -25,7 +26,7 @@
     self.finishedWithExitCodeExpectation = [[ReadableExpectation alloc] initWithDescription:@"finishedWithExitCode called"];
     self.receivedError = nil;
     self.receivedExitCode = 0;
-    self.receivedLines = [NSMutableArray array];
+    self.receivedOutputs = [NSMutableArray array];
 }
 
 - (void)testEnumerateWithCallback {
@@ -64,11 +65,11 @@
                                                        nodePath:@"myNodePath"
                                                  projectBaseDir:@"myBaseDir"];
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
-                                         commandRunner:cmdRunner];
+                                                     commandRunner:cmdRunner];
     subject.delegate = self;
     SuiteNode *node = [[StubSuiteNode alloc] initWithType:SuiteNodeTypeSpec
                                                      path:@[@"foo", @"bar", @"baz"]];
-
+    
     [subject runNode:node];
     
     XCTAssertFalse(self.finishedWithExitCodeExpectation.isFulfilled);
@@ -76,24 +77,59 @@
     XCTAssertEqualObjects(cmdRunner.lastCwd, @"myBaseDir");
     XCTAssertNotNil(cmdRunner.lastDelegate);
     
-    // For now, output is just passed through
-    [cmdRunner.lastDelegate streamingExecution:nil
-                                readOutputLine:[@"hello\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [cmdRunner.lastDelegate streamingExecution:nil
-                                readOutputLine:[@"world\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    NSArray<NSString *> *outputLines = @[
+        @"##jasmineStudio:{\"eventName\":\"jasmineStarted\",\"payload\":{\"totalSpecsDefined\":145,\"numExcludedSpecs\":131,\"order\":{\"random\":true,\"seed\":\"31947\"},\"parallel\":false}}",
+        @"##jasmineStudio:{\"eventName\":\"suiteStarted\",\"payload\":{\"id\":\"suite3\",\"description\":\"a suite\",\"fullName\":\"a suite \",\"parentSuiteId\":null}}",
+        @"hello",
+        @"##jasmineStudio:{\"eventName\":\"specStarted\",\"payload\":{\"id\":\"spec3\",\"description\":\"a spec\",\"fullName\":\"a suite a spec\",\"parentSuiteId\":\"suite3\"}}",
+        @"world"
+    ];
+    
+    for (NSString *line in outputLines) {
+        [cmdRunner.lastDelegate streamingExecution:nil
+                                    readOutputLine:[line dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
     [cmdRunner.lastDelegate streamingExecution:nil finishedWithExitCode:0];
     
     [self waitForExpectations:@[self.finishedWithExitCodeExpectation] timeout:1];
     XCTAssertEqual(self.receivedExitCode, 0);
     XCTAssertNil(self.receivedError);
-    NSArray *expectedLines = @[@"hello\n", @"world\n"];
-    XCTAssertEqualObjects(self.receivedLines, expectedLines);
+    
+    
+
+    XCTAssertEqual(self.receivedOutputs.count, outputLines.count);
+    XCTAssertEqualObjects([(id)self.receivedOutputs[0] eventName], @"jasmineStarted");
+    XCTAssertEqualObjects([(id)self.receivedOutputs[1] eventName], @"suiteStarted");
+    XCTAssertEqualObjects(self.receivedOutputs[2], @"hello");
+    XCTAssertEqualObjects([(id)self.receivedOutputs[3] eventName], @"specStarted");
+    XCTAssertEqualObjects(self.receivedOutputs[4], @"world");
+    //    XCTAssertEqualObjects(self.receivedReporterEvents[1].eventName, @"suiteStarted");
+    //    XCTAssertEqualObjects(self.receivedReporterEvents[2].eventName, @"specStarted");
+//    NSArray *expectedClasses = @[
+//        @"ReporterEvent",
+//        @"ReporterEvent",
+//        @"__NSCFString",
+//        @"ReporterEvent",
+//        @"__NSCFString",
+//    ];
+//    for (int i = 0; i < self.receivedOutputs.count; i++) {
+//        // Can't embed NSStringFromClass in an invocation of XCTAssert* macros
+//        NSString *actualClass = NSStringFromClass(self.receivedOutputs[i].class);
+//        XCTAssertEqualObjects(actualClass, expectedClasses[i]);
+//    }
+
+    
 }
 
 #pragma mark - JasmineDelegate
 
 - (void)jasmineRunner:(nonnull JasmineRunner *)sender runDidOutputLine:(nonnull NSString *)line { 
-    [self.receivedLines addObject:line];
+    [self.receivedOutputs addObject:line];
+}
+
+- (void)jasmineRunner:(JasmineRunner *)sender emittedReporterEvent:(ReporterEvent *)event {
+    [self.receivedOutputs addObject:event];
 }
 
 - (void)jasmineRunner:(nonnull JasmineRunner *)sender runFailedWithError:(nonnull NSError *)error { 

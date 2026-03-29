@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SuiteNode;
 
+// Builds a model tree from the output of Jasmine's enumerate command.
 @interface EnumerationTreeBuilder : NSObject
 
 - (NSArray<SuiteNode *> *)fromJsonData:(NSData *)data error:(NSError **)error;
