@@ -44,8 +44,6 @@
     self.subject.delegate = self;
 }
 
-// TODO: the old root/non root distinction is no longer interesting now that we model the top suite
-
 - (void)testUpdatesTopSuite {
     TopSuite *changed = [[TopSuite alloc] init];
     changed.status = TopSuiteStatusFailed;
@@ -57,7 +55,7 @@
     XCTAssertEqual(self.topSuite.status, TopSuiteStatusFailed);
 }
 
-- (void)testUpdatesNonRootNode {
+- (void)testUpdatesNonTopSuiteNode {
     SuiteOrSpec *target = self.topSuite.children[0].children[1];
     XCTAssertEqualObjects(target.name, @"child 1");
     SuiteOrSpec *parentOfChanged = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
@@ -75,7 +73,7 @@
     XCTAssertEqual(target.status, SuiteOrSpecStatusFailed);
 }
 
-- (void)testHandlesNonRootAddition {
+- (void)testHandlesAddition {
     SuiteOrSpec *target = self.topSuite.children[0];
     XCTAssertEqualObjects(target.name, @"root 0");
     SuiteOrSpec *parentOfChanged = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
@@ -91,33 +89,6 @@
     XCTAssertEqual(self.updatedNodes[0], target);
     XCTAssertEqual(target.children.count, 3);
     XCTAssertEqual(target.children[2], changed);
-}
-
-- (void)testHandlesRootChange {
-    SuiteOrSpec *target = self.topSuite.children[0];
-    XCTAssertEqualObjects(target.name, @"root 0");
-    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                        name:@"root 0"];
-    changed.status = SuiteOrSpecStatusExcluded;
-    
-    [self.subject applyChange:changed];
-    
-    XCTAssertEqual(self.updatedNodes.count, 1);
-    XCTAssertEqual(self.updatedNodes[0], target);
-    XCTAssertEqual(target.status, SuiteOrSpecStatusExcluded);
-
-}
-
-- (void)testHandlesRootAddition {
-    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                        name:@"new node"];
-    
-    [self.subject applyChange:changed];
-
-    XCTAssertEqual(self.updatedNodes.count, 1);
-    XCTAssertEqual(self.updatedNodes[0], self.topSuite);
-    XCTAssertEqual(self.topSuite.children.count, 3);
-    XCTAssertEqual(self.topSuite.children[2], changed);
 }
 
 - (void)testHandlesLeafDeletion {
@@ -149,18 +120,6 @@
     XCTAssertEqual(self.updatedNodes[0], self.topSuite.children[0]);
     XCTAssertEqual(self.topSuite.children[0].children.count, 1);
     XCTAssertEqualObjects(self.topSuite.children[0].children[0].name, @"child 1");
-}
-
-- (void)testHandlesRootDeletion {
-    [self.subject applyChange:self.topSuite.children[1]];
-    [self.updatedNodes removeAllObjects];
-    [self.subject jasmineDone];
-    
-    XCTAssertEqual(self.updatedNodes.count, 1);
-    XCTAssertEqual(self.updatedNodes[0], self.topSuite);
-    XCTAssertEqual(self.topSuite.children.count, 1);
-    XCTAssertEqualObjects(self.topSuite.children[0].name, @"root 1");
-
 }
 
 - (void)treeReconciler:(TreeReconciler *)sender didUpdateNode:(TreeNode *)node {
