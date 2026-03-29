@@ -8,7 +8,7 @@
 #import <XCTest/XCTest.h>
 #import "ReporterTreeBuilder.h"
 #import "ReporterEvent.h"
-#import "SuiteOrSpec.h"
+#import "TreeNode.h"
 
 @interface ReporterTreeBuilderTests : XCTestCase<ReporterTreeBuilderDelegate>
 @property (nonatomic, strong) NSMutableArray<SuiteOrSpec *> *emittedNodes;
@@ -41,7 +41,7 @@
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 1);
-    XCTAssertEqual(self.emittedNodes[0].type, SuiteOrSpecTypeSpec);
+    XCTAssertEqual(self.emittedNodes[0].type, TreeNodeTypeSpec);
     XCTAssertEqualObjects(self.emittedNodes[0].name, @"a spec");
     XCTAssertNil(self.emittedNodes[0].parent);
     XCTAssertEqual(self.emittedNodes[0].status, SuiteOrSpecStatusRunning);
@@ -78,7 +78,7 @@
     XCTAssertNil(error);
 
     XCTAssertEqual(self.emittedNodes.count, 2);
-    XCTAssertEqual(self.emittedNodes[1].type, SuiteOrSpecTypeSpec);
+    XCTAssertEqual(self.emittedNodes[1].type, TreeNodeTypeSpec);
     XCTAssertEqualObjects(self.emittedNodes[1].name, @"a spec");
     XCTAssertEqual(self.emittedNodes[1].parent, self.emittedNodes[0]);
     
@@ -144,7 +144,7 @@
     XCTAssertEqual(self.emittedNodes.count, 3);
     
     for (SuiteOrSpec *node in self.emittedNodes) {
-        XCTAssertEqual(node.type, SuiteOrSpecTypeSuite);
+        XCTAssertEqual(node.type, TreeNodeTypeSuite);
         XCTAssertEqual(node.status, SuiteOrSpecStatusRunning);
     }
         

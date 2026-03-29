@@ -37,11 +37,11 @@
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                          commandRunner:cmdRunner];
     __block BOOL callbackCalled = NO;
-    __block NSArray<SuiteOrSpec *> *receivedResult = nil;
+    __block TopSuite *receivedTopSuite = nil;
     __block NSError *receivedError = nil;
-    [subject enumerateWithCallback:^(NSArray<SuiteOrSpec *> * _Nullable result, NSError * _Nullable error) {
+    [subject enumerateWithCallback:^(TopSuite * _Nullable topSuite, NSError * _Nullable error) {
         callbackCalled = YES;
-        receivedResult = result;
+        receivedTopSuite = topSuite;
         receivedError = error;
     }];
     
@@ -54,9 +54,9 @@
     
     XCTAssertTrue(callbackCalled);
     XCTAssertNil(receivedError);
-    XCTAssertEqual(receivedResult.count, 1);
-    XCTAssertEqual(receivedResult[0].type, SuiteOrSpecTypeSpec);
-    XCTAssertEqualObjects(receivedResult[0].name, @"foo");
+    XCTAssertEqual(receivedTopSuite.children.count, 1);
+    XCTAssertEqual(receivedTopSuite.children[0].type, TreeNodeTypeSpec);
+    XCTAssertEqualObjects(receivedTopSuite.children[0].name, @"foo");
 }
 
 - (void)testRunNode {
@@ -67,7 +67,7 @@
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                                      commandRunner:cmdRunner];
     subject.delegate = self;
-    SuiteOrSpec *node = [[StubSuiteNode alloc] initWithType:SuiteOrSpecTypeSpec
+    SuiteOrSpec *node = [[StubSuiteNode alloc] initWithType:TreeNodeTypeSpec
                                                      path:@[@"foo", @"bar", @"baz"]];
     
     [subject runNode:node];
@@ -104,22 +104,21 @@
     XCTAssertEqualObjects(self.receivedOutputs[2], @"hello");
     XCTAssertEqualObjects([(id)self.receivedOutputs[3] eventName], @"specStarted");
     XCTAssertEqualObjects(self.receivedOutputs[4], @"world");
-    //    XCTAssertEqualObjects(self.receivedReporterEvents[1].eventName, @"suiteStarted");
-    //    XCTAssertEqualObjects(self.receivedReporterEvents[2].eventName, @"specStarted");
-//    NSArray *expectedClasses = @[
-//        @"ReporterEvent",
-//        @"ReporterEvent",
-//        @"__NSCFString",
-//        @"ReporterEvent",
-//        @"__NSCFString",
-//    ];
-//    for (int i = 0; i < self.receivedOutputs.count; i++) {
-//        // Can't embed NSStringFromClass in an invocation of XCTAssert* macros
-//        NSString *actualClass = NSStringFromClass(self.receivedOutputs[i].class);
-//        XCTAssertEqualObjects(actualClass, expectedClasses[i]);
-//    }
+}
 
+- (void)testRunNodeTopSuite {
+    MockExternalCommandRunner *cmdRunner = [[MockExternalCommandRunner alloc] init];
+    ProjectConfig *config = [[ProjectConfig alloc] initWithPath:@"myPath"
+                                                       nodePath:@"myNodePath"
+                                                 projectBaseDir:@"myBaseDir"];
+    JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
+                                                     commandRunner:cmdRunner];
+    subject.delegate = self;
+    [subject runNode:[[TopSuite alloc] init]];
     
+    for (NSString *arg in cmdRunner.lastArgs) {
+        XCTAssertFalse([arg containsString:@"--filter-path"]);
+    }
 }
 
 #pragma mark - JasmineDelegate

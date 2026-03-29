@@ -43,33 +43,38 @@
             NSLog(@"oh no: %@", [[NSString alloc] initWithData:output encoding:NSUTF8StringEncoding]);
         } else {
             EnumerationTreeBuilder *tb = [[EnumerationTreeBuilder alloc] init];
-            NSArray<SuiteOrSpec *> *roots = [tb fromJsonData:output error:&error];
-            callback(roots, error);
+            TopSuite *result = [tb fromJsonData:output error:&error];
+            callback(result, error);
         }
     }];
 }
 
-- (void)runNode:(SuiteOrSpec *)node  {
-    NSError *error = nil;
-    NSData *pathData = [NSJSONSerialization dataWithJSONObject:[node path]
-                                                       options:0
-                                                         error:&error];
+- (void)runNode:(TreeNode *)node  {
+    NSString *reporterPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"jasmineStudioReporter.js"];
+    NSMutableArray<NSString *> *args = [NSMutableArray arrayWithObjects:
+                                        [self jasmineExecutable],
+                                        [NSString stringWithFormat:@"--reporter=%@", reporterPath],
+                                        nil];
     
-    if (!pathData) {
-        // TODO report this properly
-        NSLog(@"JSON serialization failed: %@", [error localizedDescription]);
-        return;
+    
+    if (node.type != TreeNodeTypeTopSuite) {
+        NSError *error = nil;
+        NSData *filterPathData = [NSJSONSerialization dataWithJSONObject:[node path]
+                                                                 options:0
+                                                                   error:&error];
+        
+        if (!filterPathData) {
+            // TODO report this properly
+            NSLog(@"JSON serialization failed: %@", [error localizedDescription]);
+            return;
+        }
+        
+        NSString *filterPathJson = [[NSString alloc] initWithData:filterPathData
+                                                         encoding:NSUTF8StringEncoding];
+        // No need to escape anything since we're not using a shell
+        [args addObject:[NSString stringWithFormat:@"--filter-path=%@", filterPathJson]];
     }
     
-    NSString *pathJson = [[NSString alloc] initWithData:pathData
-                                               encoding:NSUTF8StringEncoding];
-    NSString *reporterPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"jasmineStudioReporter.js"];
-    NSArray<NSString *> *args = @[
-        [self jasmineExecutable],
-        // No need to escape anything since we're not using a shell
-        [NSString stringWithFormat:@"--filter-path=%@", pathJson],
-        [NSString stringWithFormat:@"--reporter=%@", reporterPath]
-    ];
     [self.cmdRunner stream:self.config.nodePath
                   withArgs:args
                       path:self.config.path

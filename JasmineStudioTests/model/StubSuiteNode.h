@@ -5,7 +5,7 @@
 //  Created by Stephen Gravrock on 4/29/25.
 //
 
-#import "SuiteOrSpec.h"
+#import "TreeNode.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, strong) NSArray<NSString *> *path;
 
-- (instancetype)initWithType:(SuiteOrSpecType)type
+- (instancetype)initWithType:(TreeNodeType)type
                         path:(NSArray<NSString *> *)path;
 
 @end

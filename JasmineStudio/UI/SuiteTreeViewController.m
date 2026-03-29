@@ -10,40 +10,41 @@
 
 @interface SuiteTreeViewController ()
 @property (weak) IBOutlet OutlineViewWithContextMenu *outlineView;
-@property (nonatomic, strong) NSArray<SuiteOrSpec *> *roots;
+@property (nonatomic, strong) TreeNode *root;
 @end
 
 @implementation SuiteTreeViewController
 
-- (void)show:(NSArray<SuiteOrSpec *> *)roots {
-    self.roots = roots;
+- (void)show:(TopSuite *)root {
+    self.root = root;
     [self.outlineView reloadData];
+    [self.outlineView expandItem:root];
 }
 
 #pragma mark NSOutlineViewDataSource
 
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(nullable id)item {
-    if (!self.roots) {
+    if (!self.root) {
         return 0;
     }
-
+    
     if (item == nil) {
-        return self.roots.count;
-    } else {
-        return ((SuiteOrSpec *)item).children.count;
+        return 1;
     }
+    
+    return ((TreeNode *)item).children.count;
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(nullable id)item {
     if (item == nil) {
-        return self.roots[index];
+        return self.root;
     } else {
-        return ((SuiteOrSpec *)item).children[index];
+        return ((TreeNode *)item).children[index];
     }
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-    return ((SuiteOrSpec *)item).children.count > 0;
+    return ((TreeNode *)item).children.count > 0;
 }
 
 // Needed for data binding
@@ -64,7 +65,7 @@
 }
 
 - (void)handleRunMenuItem:(id)sender {
-    SuiteOrSpec *target = ((NSMenuItem *)sender).representedObject;
+    TreeNode *target = ((NSMenuItem *)sender).representedObject;
     [self.delegate suiteTreeViewController:self runNode:target];
 }
 
@@ -73,10 +74,6 @@
 - (void)treeReconciler:(nonnull TreeReconciler *)sender didUpdateNode:(nonnull SuiteOrSpec *)node {
     // TODO: only reload children if child nodes were added/removed
     [self.outlineView reloadItem:node reloadChildren:YES];
-}
-
-- (void)treeReconcilerDidAddOrRemoveRoots:(nonnull TreeReconciler *)sender {
-    [self.outlineView reloadData];
 }
 
 @end

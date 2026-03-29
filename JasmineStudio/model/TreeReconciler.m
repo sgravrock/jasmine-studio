@@ -6,84 +6,55 @@
 //
 
 #import "TreeReconciler.h"
-#import "SuiteOrSpec.h"
+#import "TreeNode.h"
 
 @interface TreeReconciler()
-@property (nonatomic, strong) NSMutableSet<SuiteOrSpec *> *seen;
+@property (nonatomic, strong) NSMutableSet<TreeNode *> *seen;
 @end
 
 @implementation TreeReconciler
 
-- (instancetype)initWithRoots:(NSMutableArray<SuiteOrSpec *> *)roots {
+- (instancetype)initWithRoot:(TopSuite *)root {
     self = [super init];
     
     if (self) {
-        _roots = roots;
+        _root = root;
         _seen = [NSMutableSet set];
     }
     
     return self;
 }
 
-// TODO: Switching to a single tree (i.e. synthetic top suite) instead of an
-// array of trees would make this a lot cleaner.
-
-- (void)applyChange:(SuiteOrSpec *)changedNode {
-    if (changedNode.parent == nil) {
-        [self applyRootChange:changedNode];
-        return;
+- (void)applyChange:(TreeNode *)changedNode {
+    TreeNode *match, *parentMatch;
+    
+    if (changedNode.type == TreeNodeTypeTopSuite) {
+        match = self.root;
+        parentMatch = nil;
+    } else {
+        parentMatch = [self existingNodeMatching:changedNode.parent];
+        match = [self existingNodeMatching:(SuiteOrSpec *)changedNode in:parentMatch.children];
     }
-    
-    SuiteOrSpec *parent = [self existingNodeMatching:changedNode.parent];
-    SuiteOrSpec *match = [self existingNodeMatching:changedNode in:parent.children];
-    
+        
     if (match == nil) {
         // A newly discovered node
         [self.seen addObject:changedNode];
-        [parent.children addObject:changedNode];
-        [self.delegate treeReconciler:self didUpdateNode:parent];
+        [parentMatch.children addObject:(SuiteOrSpec *)changedNode];
+        [self.delegate treeReconciler:self didUpdateNode:parentMatch];
     } else {
         [self.seen addObject:match];
-        [self updateExistingNode:match from:changedNode];
-    }
-}
-
-- (void)applyRootChange:(SuiteOrSpec *)changedNode {
-    SuiteOrSpec *match = [self existingNodeMatching:changedNode in:self.roots];
-    
-    if (match == nil) {
-        // A newly discovered node
-        [self.seen addObject:changedNode];
-        [self.roots addObject:changedNode];
-        [self.delegate treeReconcilerDidAddOrRemoveRoots:self];
-    } else {
-        [self.seen addObject:match];
-        [self updateExistingNode:match from:changedNode];
+        [match updateFrom:changedNode];
+        [self.delegate treeReconciler:self didUpdateNode:match];
     }
 }
 
 - (void)jasmineDone {
-    NSArray *rootsToRemove = [self unseenNodesIn:self.roots];
-    
-    if (rootsToRemove.count > 0) {
-        for (SuiteOrSpec *n in rootsToRemove) {
-            [self.roots removeObjectIdenticalTo:n];
-        }
-        
-        [self.delegate treeReconcilerDidAddOrRemoveRoots:self];
-    }
-    
-    // Scan the remaining roots and remove unseen nodes
-    for (SuiteOrSpec *n in self.roots) {
-        [self removeUnseenDescendantsOf:n];
-    }
-    
-    
+    [self removeUnseenDescendantsOf:self.root];
     [self.seen removeAllObjects];
 }
 
-- (void)removeUnseenDescendantsOf:(SuiteOrSpec *)ancestor {
-    NSArray *childrenToRemove = [self unseenNodesIn:ancestor.children];
+- (void)removeUnseenDescendantsOf:(TreeNode *)ancestor {
+    NSArray *childrenToRemove = [self unseenChildrenOf:ancestor];
     
     if (childrenToRemove.count > 0) {
         for (SuiteOrSpec *n in childrenToRemove) {
@@ -98,10 +69,10 @@
     }
 }
 
-- (NSArray<SuiteOrSpec *> *)unseenNodesIn:(NSArray<SuiteOrSpec *> *)arr {
+- (NSArray<SuiteOrSpec *> *)unseenChildrenOf:(TreeNode *)parent; {
     NSMutableArray<SuiteOrSpec *> *result = [NSMutableArray array];
     
-    for (SuiteOrSpec *n in arr) {
+    for (SuiteOrSpec *n in parent.children) {
         if (![self.seen containsObject:n]) {
             [result addObject:n];
         }
@@ -110,22 +81,13 @@
     return result;
 }
 
-- (void)updateExistingNode:(SuiteOrSpec *)target from:(SuiteOrSpec *)changedNode {
-    target.status = changedNode.status;
-    // TODO copy other result properties
-    [self.delegate treeReconciler:self didUpdateNode:target];
-}
-
-- (SuiteOrSpec * _Nullable)existingNodeMatching:(SuiteOrSpec *)changedNode  {
-    NSMutableArray<SuiteOrSpec *> *candidates;
-    
-    if (changedNode.parent == nil) {
-        candidates = self.roots;
-    } else {
-        candidates = [self existingNodeMatching:changedNode.parent].children;
+- (TreeNode *)existingNodeMatching:(TreeNode *)changedNode  {
+    if (changedNode.type == TreeNodeTypeTopSuite) {
+        return self.root;
     }
-
-    return [self existingNodeMatching:changedNode in:candidates];
+    
+    NSMutableArray<SuiteOrSpec *> *candidates = [self existingNodeMatching:changedNode.parent].children;
+    return [self existingNodeMatching:(SuiteOrSpec *)changedNode in:candidates];
 }
 
 - (SuiteOrSpec * _Nullable)existingNodeMatching:(SuiteOrSpec *)changedNode in:(NSArray<SuiteOrSpec *> *)candidates {

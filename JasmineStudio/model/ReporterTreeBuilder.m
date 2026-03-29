@@ -7,7 +7,7 @@
 
 #import "ReporterTreeBuilder.h"
 #import "ReporterEvent.h"
-#import "SuiteOrSpec.h"
+#import "TreeNode.h"
 
 @interface ReporterTreeBuilder()
 @property (nonatomic, strong) SuiteOrSpec * _Nullable currentSpec;
@@ -35,7 +35,7 @@
 
     if ([event.eventName isEqualToString:@"specStarted"]) {
         // TODO validate name
-        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSpec
+        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec
                                                          name:name];
         node.status = SuiteOrSpecStatusRunning;
         node.parent = [self.currentSuites lastObject];
@@ -53,7 +53,7 @@
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"suiteStarted"]) {
         // TODO validate name
-        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite
+        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
                                                          name:name];
         node.status = SuiteOrSpecStatusRunning;
         node.parent = [self.currentSuites lastObject];

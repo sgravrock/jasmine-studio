@@ -7,7 +7,7 @@
 
 #import <XCTest/XCTest.h>
 #import "EnumerationTreeBuilder.h"
-#import "SuiteOrSpec.h"
+#import "TreeNode.h"
 
 @interface EnumerationTreeBuilderTests : XCTestCase
 @end
@@ -37,25 +37,25 @@
     EnumerationTreeBuilder *subject = [[EnumerationTreeBuilder alloc] init];
 
     NSError *error = nil;
-    NSArray<SuiteOrSpec *> *result = [subject fromJsonData:jsonData error:&error];
+    TopSuite *result = [subject fromJsonData:jsonData error:&error];
     
     XCTAssertNil(error);
-    XCTAssertEqual([result count], 1);
+    XCTAssertEqual(result.children.count, 1);
     
-    SuiteOrSpec *rootSuite = result[0];
-    XCTAssertEqual(rootSuite.type, SuiteOrSpecTypeSuite);
+    SuiteOrSpec *rootSuite = result.children[0];
+    XCTAssertEqual(rootSuite.type, TreeNodeTypeSuite);
     XCTAssertEqualObjects(rootSuite.name, @"root suite");
     XCTAssertNil(rootSuite.parent);
     XCTAssertEqual(rootSuite.children.count, 1);
     
     SuiteOrSpec *nestedSuite = rootSuite.children[0];
-    XCTAssertEqual(nestedSuite.type, SuiteOrSpecTypeSuite);
+    XCTAssertEqual(nestedSuite.type, TreeNodeTypeSuite);
     XCTAssertEqualObjects(nestedSuite.name, @"nested suite");
     XCTAssertEqual(nestedSuite.parent, rootSuite); // reference equality
     XCTAssertEqual(nestedSuite.children.count, 1);
     
     SuiteOrSpec *spec = nestedSuite.children[0];
-    XCTAssertEqual(spec.type, SuiteOrSpecTypeSpec);
+    XCTAssertEqual(spec.type, TreeNodeTypeSpec);
     XCTAssertEqualObjects(spec.name, @"spec name");
     XCTAssertEqual(nestedSuite, spec.parent); // reference equality
     XCTAssertEqual(spec.children.count, 0);

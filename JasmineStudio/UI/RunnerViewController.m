@@ -36,21 +36,20 @@
     __weak RunnerViewController *weakSelf = self;
     
     // TODO: show some kind of loading indicator
-    [self.jasmineRunner enumerateWithCallback:^(NSArray<SuiteOrSpec *> * _Nullable result, NSError * _Nullable error) {
+    [self.jasmineRunner enumerateWithCallback:^(TopSuite* _Nullable topSuite, NSError * _Nullable error) {
         if (error != nil) {
             // TODO
             NSLog(@"Enumeration failed: %@", [error localizedDescription]);
         } else {
-            NSMutableArray *mutableResult = [NSMutableArray arrayWithArray:result];
-            [weakSelf.treeViewController show:mutableResult];
-            weakSelf.treeReconciler = [[TreeReconciler alloc] initWithRoots:mutableResult];
+            [weakSelf.treeViewController show:topSuite];
+            weakSelf.treeReconciler = [[TreeReconciler alloc] initWithRoot:topSuite];
             weakSelf.treeReconciler.delegate = weakSelf.treeViewController;
         }
     }];
 }
 
 - (void)suiteTreeViewController:(nonnull SuiteTreeViewController *)sender
-                        runNode:(nonnull SuiteOrSpec *)node {
+                        runNode:(nonnull TreeNode *)node {
     // TODO: show some kind of loading indicator
     [self.outputViewController clearOutput];
     self.treeBuilder = [[ReporterTreeBuilder alloc] init];

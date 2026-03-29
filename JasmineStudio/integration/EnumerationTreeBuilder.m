@@ -6,11 +6,11 @@
 //
 
 #import "EnumerationTreeBuilder.h"
-#import "SuiteOrSpec.h"
+#import "TreeNode.h"
 
 @implementation EnumerationTreeBuilder
 
-- (NSArray<SuiteOrSpec *> *)fromJsonData:(NSData *)data error:(NSError **)error {
+- (TopSuite *)fromJsonData:(NSData *)data error:(NSError **)error {
     id jsonArray = [NSJSONSerialization JSONObjectWithData:data
                                                    options:0
                                                      error:error];
@@ -24,7 +24,10 @@
         return nil;
     }
     
-    return [self fromJsonArray:jsonArray error:error];
+    NSArray<SuiteOrSpec *> *roots = [self fromJsonArray:jsonArray error:error];
+    TopSuite *result = [[TopSuite alloc] init];
+    [result.children addObjectsFromArray:roots];
+    return result;
 }
 
 - (NSArray<SuiteOrSpec *> *)fromJsonArray:(NSArray *)jsonArray error:(NSError **)error {
@@ -58,7 +61,7 @@
             return nil;
         }
         
-        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSuite name:name];
+        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite name:name];
         [node.children addObjectsFromArray:children];
         
         for (SuiteOrSpec *child in children) {
@@ -67,7 +70,7 @@
         
         return node;
     } else if ([type isEqualToString:@"spec"]) {
-        return [[SuiteOrSpec alloc] initWithType:SuiteOrSpecTypeSpec name:name];
+        return [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec name:name];
     } else {
         // TODO report error
         return nil;
