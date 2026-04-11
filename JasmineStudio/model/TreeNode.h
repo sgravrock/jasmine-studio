@@ -9,13 +9,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-// TODO: Might be better to remove this and use class type instead
-typedef enum {
-    TreeNodeTypeTopSuite,
-    TreeNodeTypeSuite,
-    TreeNodeTypeSpec
-} TreeNodeType;
-
 typedef enum {
     TopSuiteStatusNotStarted,
     TopSuiteStatusRunning,
@@ -38,7 +31,6 @@ typedef enum {
 
 @interface TreeNode: NSObject
 
-@property (nonatomic, readonly, assign) TreeNodeType type;
 @property (nonatomic, readonly, strong) NSString *name;
 @property (nonatomic, weak) TreeNode * _Nullable parent;
 // The node's children. If the node represents a spec, children should be empty,
@@ -46,7 +38,7 @@ typedef enum {
 @property (nonatomic, readonly, strong) NSMutableArray<SuiteOrSpec *> *children;
 
 - (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithType:(TreeNodeType)type name:(NSString *)name NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(NSString *)name NS_DESIGNATED_INITIALIZER;
 
 - (NSArray<NSString *> *)path;
 - (void)updateFrom:(TreeNode *)other;
@@ -59,19 +51,24 @@ typedef enum {
 @property (nonatomic, assign) TopSuiteStatus status;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithType:(TreeNodeType)type name:(NSString *)name NS_UNAVAILABLE;
+- (instancetype)initWithName:(NSString *)name NS_UNAVAILABLE;
 
 @end
 
 
-// Represents a suite or spec, as determined by the type property.
+// A node that is not the top suite.
 @interface SuiteOrSpec: TreeNode
 
 @property (nonatomic, assign) SuiteOrSpecStatus status;
 
-- (instancetype)init NS_UNAVAILABLE;
-- (instancetype)initWithType:(TreeNodeType)type name:(NSString *)name NS_DESIGNATED_INITIALIZER;
+@end
 
+
+@interface Suite: SuiteOrSpec
+@end
+
+
+@interface Spec: SuiteOrSpec
 @end
 
 NS_ASSUME_NONNULL_END

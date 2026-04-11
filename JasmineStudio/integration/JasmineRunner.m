@@ -57,7 +57,7 @@
                                         nil];
     
     
-    if (node.type != TreeNodeTypeTopSuite) {
+    if (![node isKindOfClass:[TopSuite class]]) {
         NSError *error = nil;
         NSData *filterPathData = [NSJSONSerialization dataWithJSONObject:[node path]
                                                                  options:0

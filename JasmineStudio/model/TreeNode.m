@@ -9,11 +9,10 @@
 
 @implementation TreeNode
 
-- (instancetype)initWithType:(TreeNodeType)type name:(NSString *)name {
+- (instancetype)initWithName:(NSString *)name {
     self = [super init];
     
     if (self) {
-        _type = type;
         _name = name;
         _children = [NSMutableArray array];
     }
@@ -38,13 +37,17 @@
 @implementation TopSuite
 
 - (instancetype)init {
-    self = [super initWithType:TreeNodeTypeTopSuite name:@"Top suite"];
+    self = [super initWithName:@"Top suite"];
     
     if (self) {
         _status = TopSuiteStatusNotStarted;
     }
     
     return self;
+}
+
+- (NSArray<NSString *> *)path {
+    return [NSArray array];
 }
 
 - (void)updateFrom:(TreeNode *)other {
@@ -61,8 +64,8 @@
 
 @implementation SuiteOrSpec
 
-- (instancetype)initWithType:(TreeNodeType)type name:(NSString *)name {
-    self = [super initWithType:type name:name];
+- (instancetype)initWithName:(NSString *)name {
+    self = [super initWithName:name];
     
     if (self) {
         _status = SuiteOrSpecStatusNotStarted;
@@ -80,4 +83,12 @@
     self.status = ((SuiteOrSpec *)other).status;
 }
 
+@end
+
+
+@implementation Suite
+@end
+
+
+@implementation Spec
 @end

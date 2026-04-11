@@ -21,24 +21,16 @@
     self.updatedNodes = [NSMutableArray array];
     self.topSuite = [[TopSuite alloc] init];
     
-    SuiteOrSpec *root0 = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                      name:@"root 0"];
-    [self.topSuite.children addObject:root0];
-    SuiteOrSpec *root1 = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                      name:@"root 1"];
-    [self.topSuite.children addObject:root1];
-    SuiteOrSpec *child0 = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                       name:@"child 0"];
-    [root0.children addObject:child0];
-    child0.parent = root0;
-    SuiteOrSpec *child1 = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                       name:@"child 1"];
-    [root0.children addObject:child1];
-    child1.parent = root0;
-    SuiteOrSpec *spec = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec
-                                                     name:@"spec"];
-    [child0.children addObject:spec];
-    spec.parent = child0;
+    Suite *root0 = [[Suite alloc] initWithName:@"root 0"];
+    [self addNode:root0 toParent:self.topSuite];
+    Suite *root1 = [[Suite alloc] initWithName:@"root 1"];
+    [self addNode:root1 toParent:self.topSuite];
+    Suite *child0 = [[Suite alloc] initWithName:@"child 0"];
+    [self addNode:child0 toParent:root0];
+    Suite *child1 = [[Suite alloc] initWithName:@"child 1"];
+    [self addNode:child1 toParent:root0];
+    Spec *spec = [[Spec alloc] initWithName:@"spec"];
+    [self addNode:spec toParent:child0];
     
     self.subject = [[TreeReconciler alloc] initWithRoot:self.topSuite];
     self.subject.delegate = self;
@@ -58,13 +50,12 @@
 - (void)testUpdatesNonTopSuiteNode {
     SuiteOrSpec *target = self.topSuite.children[0].children[1];
     XCTAssertEqualObjects(target.name, @"child 1");
-    SuiteOrSpec *parentOfChanged = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                                name:@"root 0"];
-    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                        name:@"child 1"];
+    TopSuite *topSuite = [[TopSuite alloc] init];
+    Suite *parentOfChanged = [[Suite alloc] initWithName:@"root 0"];
+    [self addNode:parentOfChanged toParent:topSuite];
+    Suite *changed = [[Suite alloc] initWithName:@"child 1"];
+    [self addNode:changed toParent:parentOfChanged];
     changed.status = SuiteOrSpecStatusFailed;
-    changed.parent = parentOfChanged;
-    [parentOfChanged.children addObject:changed];
     
     [self.subject applyChange:changed];
     
@@ -76,12 +67,11 @@
 - (void)testHandlesAddition {
     SuiteOrSpec *target = self.topSuite.children[0];
     XCTAssertEqualObjects(target.name, @"root 0");
-    SuiteOrSpec *parentOfChanged = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                                name:@"root 0"];
-    SuiteOrSpec *changed = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                        name:@"child 2"];
-    changed.parent = parentOfChanged;
-    [parentOfChanged.children addObject:changed];
+    TopSuite *topSuite = [[TopSuite alloc] init];
+    Suite *parentOfChanged = [[Suite alloc] initWithName:@"root 0"];
+    [self addNode:parentOfChanged toParent:topSuite];
+    Suite *changed = [[Suite alloc] initWithName:@"child 2"];
+    [self addNode:changed toParent:parentOfChanged];
     
     [self.subject applyChange:changed];
 
@@ -120,6 +110,11 @@
     XCTAssertEqual(self.updatedNodes[0], self.topSuite.children[0]);
     XCTAssertEqual(self.topSuite.children[0].children.count, 1);
     XCTAssertEqualObjects(self.topSuite.children[0].children[0].name, @"child 1");
+}
+
+- (void)addNode:(SuiteOrSpec *)node toParent:(TreeNode *)parent {
+    node.parent = parent;
+    [parent.children addObject:node];
 }
 
 - (void)treeReconciler:(TreeReconciler *)sender didUpdateNode:(TreeNode *)node {

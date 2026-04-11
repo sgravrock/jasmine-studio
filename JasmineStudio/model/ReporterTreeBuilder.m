@@ -12,6 +12,7 @@
 @interface ReporterTreeBuilder()
 @property (nonatomic, strong) SuiteOrSpec * _Nullable currentSpec;
 @property (nonatomic, strong) NSMutableArray<SuiteOrSpec *> *currentSuites;
+@property (nonatomic, strong) TopSuite *topSuite;
 @end
 
 @implementation ReporterTreeBuilder
@@ -21,6 +22,7 @@
     
     if (self) {
         _currentSuites = [NSMutableArray array];
+        _topSuite = [[TopSuite alloc] init];
     }
     
     return self;
@@ -35,10 +37,15 @@
 
     if ([event.eventName isEqualToString:@"specStarted"]) {
         // TODO validate name
-        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec
-                                                         name:name];
+        SuiteOrSpec *node = [[Spec alloc] initWithName:name];
         node.status = SuiteOrSpecStatusRunning;
-        node.parent = [self.currentSuites lastObject];
+        
+        if (self.currentSuites.count == 0) {
+            node.parent = self.topSuite;
+        } else {
+            node.parent = [self.currentSuites lastObject];
+        }
+        
         self.currentSpec = node;
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"specDone"]) {
@@ -53,10 +60,15 @@
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"suiteStarted"]) {
         // TODO validate name
-        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite
-                                                         name:name];
+        SuiteOrSpec *node = [[Suite alloc] initWithName:name];
         node.status = SuiteOrSpecStatusRunning;
-        node.parent = [self.currentSuites lastObject];
+
+        if (self.currentSuites.count == 0) {
+            node.parent = self.topSuite;
+        } else {
+            node.parent = [self.currentSuites lastObject];
+        }
+
         [self.currentSuites addObject:node];
         [self.delegate reporterTreeBuilder:self didUpdateNode:node];
     } else if ([event.eventName isEqualToString:@"suiteDone"]) {

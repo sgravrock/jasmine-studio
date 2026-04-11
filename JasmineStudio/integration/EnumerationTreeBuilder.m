@@ -61,7 +61,7 @@
             return nil;
         }
         
-        SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite name:name];
+        SuiteOrSpec *node = [[Suite alloc] initWithName:name];
         [node.children addObjectsFromArray:children];
         
         for (SuiteOrSpec *child in children) {
@@ -70,7 +70,7 @@
         
         return node;
     } else if ([type isEqualToString:@"spec"]) {
-        return [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec name:name];
+        return [[Spec alloc] initWithName:name];
     } else {
         // TODO report error
         return nil;

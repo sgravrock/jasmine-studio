@@ -28,11 +28,18 @@
 - (void)applyChange:(TreeNode *)changedNode {
     TreeNode *match, *parentMatch;
     
-    if (changedNode.type == TreeNodeTypeTopSuite) {
+    if ([changedNode isKindOfClass:[TopSuite class]]) {
         match = self.root;
         parentMatch = nil;
     } else {
         parentMatch = [self existingNodeMatching:changedNode.parent];
+        
+        if (parentMatch == nil) {
+            // Can't happen
+            NSLog(@"Could not find match for parent node: %@", [changedNode.parent path]);
+            return;
+        }
+        
         match = [self existingNodeMatching:(SuiteOrSpec *)changedNode in:parentMatch.children];
     }
         
@@ -82,10 +89,16 @@
 }
 
 - (TreeNode *)existingNodeMatching:(TreeNode *)changedNode  {
-    if (changedNode.type == TreeNodeTypeTopSuite) {
+    if (changedNode == nil) {
+        // Shouldn't happen, but avoid infinite recursion if it does
+        return nil;
+    }
+    
+    if ([changedNode isKindOfClass:[TopSuite class]]) {
         return self.root;
     }
     
+    // TODO: infinite recursion here?
     NSMutableArray<SuiteOrSpec *> *candidates = [self existingNodeMatching:changedNode.parent].children;
     return [self existingNodeMatching:(SuiteOrSpec *)changedNode in:candidates];
 }

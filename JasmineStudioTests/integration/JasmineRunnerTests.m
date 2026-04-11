@@ -55,7 +55,7 @@
     XCTAssertTrue(callbackCalled);
     XCTAssertNil(receivedError);
     XCTAssertEqual(receivedTopSuite.children.count, 1);
-    XCTAssertEqual(receivedTopSuite.children[0].type, TreeNodeTypeSpec);
+    XCTAssertTrue([receivedTopSuite.children[0] isKindOfClass:[Spec class]]);
     XCTAssertEqualObjects(receivedTopSuite.children[0].name, @"foo");
 }
 
@@ -67,10 +67,10 @@
     JasmineRunner *subject = [[JasmineRunner alloc] initWithConfig:config
                                                      commandRunner:cmdRunner];
     subject.delegate = self;
-    SuiteOrSpec *grandparent = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite name:@"foo"];
-    SuiteOrSpec *parent = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSuite name:@"bar"];
+    Suite *grandparent = [[Suite alloc] initWithName:@"foo"];
+    Suite *parent = [[Suite alloc] initWithName:@"bar"];
     parent.parent = grandparent;
-    SuiteOrSpec *node = [[SuiteOrSpec alloc] initWithType:TreeNodeTypeSpec name:@"baz"];
+    Suite *node = [[Suite alloc] initWithName:@"baz"];
     node.parent = parent;
     
     [subject runNode:node];

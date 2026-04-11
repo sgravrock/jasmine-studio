@@ -41,9 +41,10 @@
     XCTAssertNil(error);
     
     XCTAssertEqual(self.emittedNodes.count, 1);
-    XCTAssertEqual(self.emittedNodes[0].type, TreeNodeTypeSpec);
+    XCTAssertTrue([self.emittedNodes[0] isKindOfClass:[Spec class]]);
+
     XCTAssertEqualObjects(self.emittedNodes[0].name, @"a spec");
-    XCTAssertNil(self.emittedNodes[0].parent);
+    XCTAssertTrue([self.emittedNodes[0].parent isKindOfClass:[TopSuite class]]);
     XCTAssertEqual(self.emittedNodes[0].status, SuiteOrSpecStatusRunning);
     
     XCTAssertTrue([self.subject handleEvent:doneEvent error:&error]);
@@ -78,7 +79,7 @@
     XCTAssertNil(error);
 
     XCTAssertEqual(self.emittedNodes.count, 2);
-    XCTAssertEqual(self.emittedNodes[1].type, TreeNodeTypeSpec);
+    XCTAssertTrue([self.emittedNodes[1] isKindOfClass:[Spec class]]);
     XCTAssertEqualObjects(self.emittedNodes[1].name, @"a spec");
     XCTAssertEqual(self.emittedNodes[1].parent, self.emittedNodes[0]);
     
@@ -144,7 +145,7 @@
     XCTAssertEqual(self.emittedNodes.count, 3);
     
     for (SuiteOrSpec *node in self.emittedNodes) {
-        XCTAssertEqual(node.type, TreeNodeTypeSuite);
+        XCTAssertTrue([node isKindOfClass:[Suite class]]);
         XCTAssertEqual(node.status, SuiteOrSpecStatusRunning);
     }
         
@@ -152,7 +153,7 @@
     XCTAssertEqualObjects(self.emittedNodes[1].name, @"suite b");
     XCTAssertEqualObjects(self.emittedNodes[2].name, @"suite c");
     
-    XCTAssertNil(self.emittedNodes[0].parent);
+    XCTAssertTrue([self.emittedNodes[0].parent isKindOfClass:[TopSuite class]]);
     XCTAssertEqual(self.emittedNodes[1].parent, self.emittedNodes[0]);
     XCTAssertEqual(self.emittedNodes[2].parent, self.emittedNodes[1]);
 
