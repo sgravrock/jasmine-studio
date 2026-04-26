@@ -6,12 +6,9 @@
 //
 
 #import "RunnerViewController.h"
-#import "OutputViewController.h"
 #import "TreeReconciler.h"
 
 @interface RunnerViewController ()
-@property (nonatomic, weak) SuiteTreeViewController *treeViewController;
-@property (nonatomic, weak) OutputViewController *outputViewController;
 @property (nonatomic, strong) ReporterTreeBuilder *treeBuilder;
 // Created after enumeration
 @property (nonatomic, strong) TreeReconciler * _Nullable treeReconciler;
